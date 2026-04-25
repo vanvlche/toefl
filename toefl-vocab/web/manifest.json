@@ -1,0 +1,28 @@
+{
+  "name": "TOEFL Vocabulary Review",
+  "short_name": "TOEFL Vocab",
+  "description": "Offline-first TOEFL vocabulary review and local grading app.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f6f8f5",
+  "theme_color": "#10202b",
+  "categories": ["education", "productivity"],
+  "lang": "ko",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='36' fill='%2310202b'/%3E%3Cpath d='M43 54h106v20H43zM43 88h74v18H43zM43 120h94v18H43z' fill='%23ffffff'/%3E%3Ccircle cx='145' cy='124' r='20' fill='%232e6f69'/%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='96' fill='%2310202b'/%3E%3Cpath d='M116 145h280v52H116zM116 236h196v48H116zM116 323h248v48H116z' fill='%23ffffff'/%3E%3Ccircle cx='386' cy='330' r='54' fill='%232e6f69'/%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

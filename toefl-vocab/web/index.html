@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self'; img-src 'self' data:; script-src 'self'; style-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'">
+    <meta name="theme-color" content="#10202b">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="TOEFL Vocab">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>TOEFL Vocab</title>
+    <link rel="manifest" href="./manifest.json">
+    <link rel="stylesheet" href="./style.css">
+  </head>
+  <body>
+    <div id="app" class="app-shell">
+      <header class="app-header">
+        <div>
+          <p class="eyebrow">TOEFL Vocabulary</p>
+          <h1 id="screen-title">Today Review</h1>
+        </div>
+        <button id="back-button" class="icon-button hidden" type="button" aria-label="뒤로가기">‹</button>
+      </header>
+
+      <main id="screen" class="screen" tabindex="-1">
+        <section class="empty-state">
+          <p>Loading...</p>
+        </section>
+      </main>
+
+      <nav class="bottom-nav" aria-label="Primary">
+        <button class="nav-button active" type="button" data-route="today" aria-label="Today Review">
+          <span class="nav-icon">⌂</span>
+          <span>Today</span>
+        </button>
+        <button class="nav-button" type="button" data-route="wrong" aria-label="Wrong Answers">
+          <span class="nav-icon">!</span>
+          <span>Wrong</span>
+        </button>
+        <button class="nav-button" type="button" data-route="settings" aria-label="Settings">
+          <span class="nav-icon">⚙</span>
+          <span>Settings</span>
+        </button>
+      </nav>
+    </div>
+
+    <script src="./app.js" defer></script>
+  </body>
+</html>

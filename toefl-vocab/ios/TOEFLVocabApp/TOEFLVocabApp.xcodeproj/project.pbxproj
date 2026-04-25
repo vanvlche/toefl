@@ -1,0 +1,550 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1B0000000000000000000001 /* TOEFLVocabApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0000000000000000000001 /* TOEFLVocabApp.swift */; };
+		1B0000000000000000000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0000000000000000000002 /* ContentView.swift */; };
+		1B0000000000000000000003 /* GradingResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0000000000000000000003 /* GradingResult.swift */; };
+		1B0000000000000000000004 /* VocabEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0000000000000000000004 /* VocabEntry.swift */; };
+		1B0000000000000000000005 /* ReviewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0000000000000000000005 /* ReviewState.swift */; };
+		1B0000000000000000000006 /* QuizAttempt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0000000000000000000006 /* QuizAttempt.swift */; };
+		1B0000000000000000000007 /* ConfusionPair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0000000000000000000007 /* ConfusionPair.swift */; };
+		1B0000000000000000000008 /* SeedImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0000000000000000000008 /* SeedImporter.swift */; };
+		1B0000000000000000000009 /* LocalGrader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0000000000000000000009 /* LocalGrader.swift */; };
+		1B0000000000000000000010 /* ReviewScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0000000000000000000010 /* ReviewScheduler.swift */; };
+		1B0000000000000000000011 /* TodayReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0000000000000000000011 /* TodayReviewView.swift */; };
+		1B0000000000000000000012 /* QuizView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0000000000000000000012 /* QuizView.swift */; };
+		1B0000000000000000000013 /* GradingResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0000000000000000000013 /* GradingResultView.swift */; };
+		1B0000000000000000000014 /* WrongAnswersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0000000000000000000014 /* WrongAnswersView.swift */; };
+		1B0000000000000000000015 /* WordDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0000000000000000000015 /* WordDetailView.swift */; };
+		1B0000000000000000000016 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0000000000000000000016 /* SettingsView.swift */; };
+		1B0000000000000000000017 /* seed_words.json in Resources */ = {isa = PBXBuildFile; fileRef = 1F0000000000000000000017 /* seed_words.json */; };
+		1B0000000000000000000018 /* SeedImporterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0000000000000000000018 /* SeedImporterTests.swift */; };
+		1B0000000000000000000019 /* LocalGraderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0000000000000000000019 /* LocalGraderTests.swift */; };
+		1B0000000000000000000020 /* ReviewSchedulerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0000000000000000000020 /* ReviewSchedulerTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		1D0000000000000000000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1A0000000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1A0000000000000000000010;
+			remoteInfo = TOEFLVocabApp;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		1F0000000000000000000001 /* TOEFLVocabApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TOEFLVocabApp.swift; sourceTree = "<group>"; };
+		1F0000000000000000000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		1F0000000000000000000003 /* GradingResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradingResult.swift; sourceTree = "<group>"; };
+		1F0000000000000000000004 /* VocabEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabEntry.swift; sourceTree = "<group>"; };
+		1F0000000000000000000005 /* ReviewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewState.swift; sourceTree = "<group>"; };
+		1F0000000000000000000006 /* QuizAttempt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizAttempt.swift; sourceTree = "<group>"; };
+		1F0000000000000000000007 /* ConfusionPair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfusionPair.swift; sourceTree = "<group>"; };
+		1F0000000000000000000008 /* SeedImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedImporter.swift; sourceTree = "<group>"; };
+		1F0000000000000000000009 /* LocalGrader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalGrader.swift; sourceTree = "<group>"; };
+		1F0000000000000000000010 /* ReviewScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewScheduler.swift; sourceTree = "<group>"; };
+		1F0000000000000000000011 /* TodayReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayReviewView.swift; sourceTree = "<group>"; };
+		1F0000000000000000000012 /* QuizView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizView.swift; sourceTree = "<group>"; };
+		1F0000000000000000000013 /* GradingResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradingResultView.swift; sourceTree = "<group>"; };
+		1F0000000000000000000014 /* WrongAnswersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WrongAnswersView.swift; sourceTree = "<group>"; };
+		1F0000000000000000000015 /* WordDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordDetailView.swift; sourceTree = "<group>"; };
+		1F0000000000000000000016 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		1F0000000000000000000017 /* seed_words.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = seed_words.json; sourceTree = "<group>"; };
+		1F0000000000000000000018 /* SeedImporterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedImporterTests.swift; sourceTree = "<group>"; };
+		1F0000000000000000000019 /* LocalGraderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalGraderTests.swift; sourceTree = "<group>"; };
+		1F0000000000000000000020 /* ReviewSchedulerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewSchedulerTests.swift; sourceTree = "<group>"; };
+		1F0000000000000000000021 /* TOEFLVocabApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TOEFLVocabApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F0000000000000000000022 /* TOEFLVocabAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TOEFLVocabAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1A0000000000000000000015 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1A0000000000000000000018 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1A0000000000000000000002 = {
+			isa = PBXGroup;
+			children = (
+				1A0000000000000000000004 /* TOEFLVocabApp */,
+				1A0000000000000000000009 /* TOEFLVocabAppTests */,
+				1A0000000000000000000003 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		1A0000000000000000000003 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1F0000000000000000000021 /* TOEFLVocabApp.app */,
+				1F0000000000000000000022 /* TOEFLVocabAppTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1A0000000000000000000004 /* TOEFLVocabApp */ = {
+			isa = PBXGroup;
+			children = (
+				1F0000000000000000000001 /* TOEFLVocabApp.swift */,
+				1F0000000000000000000002 /* ContentView.swift */,
+				1A0000000000000000000005 /* Models */,
+				1A0000000000000000000006 /* Services */,
+				1A0000000000000000000007 /* Views */,
+				1A0000000000000000000008 /* Resources */,
+			);
+			path = TOEFLVocabApp;
+			sourceTree = "<group>";
+		};
+		1A0000000000000000000005 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				1F0000000000000000000003 /* GradingResult.swift */,
+				1F0000000000000000000004 /* VocabEntry.swift */,
+				1F0000000000000000000005 /* ReviewState.swift */,
+				1F0000000000000000000006 /* QuizAttempt.swift */,
+				1F0000000000000000000007 /* ConfusionPair.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		1A0000000000000000000006 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				1F0000000000000000000008 /* SeedImporter.swift */,
+				1F0000000000000000000009 /* LocalGrader.swift */,
+				1F0000000000000000000010 /* ReviewScheduler.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		1A0000000000000000000007 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				1F0000000000000000000011 /* TodayReviewView.swift */,
+				1F0000000000000000000012 /* QuizView.swift */,
+				1F0000000000000000000013 /* GradingResultView.swift */,
+				1F0000000000000000000014 /* WrongAnswersView.swift */,
+				1F0000000000000000000015 /* WordDetailView.swift */,
+				1F0000000000000000000016 /* SettingsView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		1A0000000000000000000008 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				1F0000000000000000000017 /* seed_words.json */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		1A0000000000000000000009 /* TOEFLVocabAppTests */ = {
+			isa = PBXGroup;
+			children = (
+				1F0000000000000000000018 /* SeedImporterTests.swift */,
+				1F0000000000000000000019 /* LocalGraderTests.swift */,
+				1F0000000000000000000020 /* ReviewSchedulerTests.swift */,
+			);
+			path = TOEFLVocabAppTests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1A0000000000000000000010 /* TOEFLVocabApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1C0000000000000000000006 /* Build configuration list for PBXNativeTarget "TOEFLVocabApp" */;
+			buildPhases = (
+				1A0000000000000000000014 /* Sources */,
+				1A0000000000000000000015 /* Frameworks */,
+				1A0000000000000000000016 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TOEFLVocabApp;
+			productName = TOEFLVocabApp;
+			productReference = 1F0000000000000000000021 /* TOEFLVocabApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+		1A0000000000000000000011 /* TOEFLVocabAppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1C0000000000000000000009 /* Build configuration list for PBXNativeTarget "TOEFLVocabAppTests" */;
+			buildPhases = (
+				1A0000000000000000000017 /* Sources */,
+				1A0000000000000000000018 /* Frameworks */,
+				1A0000000000000000000019 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1D0000000000000000000002 /* PBXTargetDependency */,
+			);
+			name = TOEFLVocabAppTests;
+			productName = TOEFLVocabAppTests;
+			productReference = 1F0000000000000000000022 /* TOEFLVocabAppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1A0000000000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					1A0000000000000000000010 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+					1A0000000000000000000011 = {
+						CreatedOnToolsVersion = 15.0;
+						TestTargetID = 1A0000000000000000000010;
+					};
+				};
+			};
+			buildConfigurationList = 1C0000000000000000000003 /* Build configuration list for PBXProject "TOEFLVocabApp" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 1A0000000000000000000002;
+			productRefGroup = 1A0000000000000000000003 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1A0000000000000000000010 /* TOEFLVocabApp */,
+				1A0000000000000000000011 /* TOEFLVocabAppTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1A0000000000000000000016 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1B0000000000000000000017 /* seed_words.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1A0000000000000000000019 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1A0000000000000000000014 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1B0000000000000000000001 /* TOEFLVocabApp.swift in Sources */,
+				1B0000000000000000000002 /* ContentView.swift in Sources */,
+				1B0000000000000000000003 /* GradingResult.swift in Sources */,
+				1B0000000000000000000004 /* VocabEntry.swift in Sources */,
+				1B0000000000000000000005 /* ReviewState.swift in Sources */,
+				1B0000000000000000000006 /* QuizAttempt.swift in Sources */,
+				1B0000000000000000000007 /* ConfusionPair.swift in Sources */,
+				1B0000000000000000000008 /* SeedImporter.swift in Sources */,
+				1B0000000000000000000009 /* LocalGrader.swift in Sources */,
+				1B0000000000000000000010 /* ReviewScheduler.swift in Sources */,
+				1B0000000000000000000011 /* TodayReviewView.swift in Sources */,
+				1B0000000000000000000012 /* QuizView.swift in Sources */,
+				1B0000000000000000000013 /* GradingResultView.swift in Sources */,
+				1B0000000000000000000014 /* WrongAnswersView.swift in Sources */,
+				1B0000000000000000000015 /* WordDetailView.swift in Sources */,
+				1B0000000000000000000016 /* SettingsView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1A0000000000000000000017 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1B0000000000000000000018 /* SeedImporterTests.swift in Sources */,
+				1B0000000000000000000019 /* LocalGraderTests.swift in Sources */,
+				1B0000000000000000000020 /* ReviewSchedulerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		1D0000000000000000000002 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1A0000000000000000000010 /* TOEFLVocabApp */;
+			targetProxy = 1D0000000000000000000001 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		1C0000000000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		1C0000000000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		1C0000000000000000000004 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.codex.toeflvocab;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		1C0000000000000000000005 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.codex.toeflvocab;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		1C0000000000000000000007 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.codex.toeflvocab.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TOEFLVocabApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TOEFLVocabApp";
+			};
+			name = Debug;
+		};
+		1C0000000000000000000008 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.codex.toeflvocab.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TOEFLVocabApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TOEFLVocabApp";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1C0000000000000000000003 /* Build configuration list for PBXProject "TOEFLVocabApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1C0000000000000000000001 /* Debug */,
+				1C0000000000000000000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1C0000000000000000000006 /* Build configuration list for PBXNativeTarget "TOEFLVocabApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1C0000000000000000000004 /* Debug */,
+				1C0000000000000000000005 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1C0000000000000000000009 /* Build configuration list for PBXNativeTarget "TOEFLVocabAppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1C0000000000000000000007 /* Debug */,
+				1C0000000000000000000008 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 1A0000000000000000000001 /* Project object */;
+}
