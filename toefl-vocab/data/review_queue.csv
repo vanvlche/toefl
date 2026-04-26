@@ -44,3 +44,13 @@ be accompanied by,2026-05-02,7,2.50,2,0,2026-04-25,correct,1,deck_import:D8; ent
 broadly,2026-04-28,3,2.50,1,0,2026-04-25,correct,1,session_import
 whereby,2026-04-28,3,2.50,1,0,2026-04-25,correct,1,session_import
 liberate,2026-04-28,3,2.50,1,0,2026-04-25,correct,1,session_import
+tremendous,2026-04-28,3,2.50,1,0,2026-04-25,correct,1,session_import
+cope with,2026-04-26,1,2.50,0,1,2026-04-25,blank,2,session_import; entry_type=phrase
+inducement,2026-04-26,1,2.50,0,1,2026-04-25,wrong,1,session_import; word_normalized_from_session=inducment
+comprise,2026-04-28,3,2.50,1,0,2026-04-25,correct,1,session_import
+allegiance,2026-04-26,1,2.50,0,1,2026-04-25,wrong,1,session_import
+idiosyncrasy,2026-04-26,1,2.50,0,1,2026-04-25,partial,2,session_import
+minute,2026-04-28,3,2.50,1,0,2026-04-25,correct,1,session_import
+markedly,2026-04-26,1,2.50,0,1,2026-04-25,wrong,1,session_import
+disseminate,2026-04-26,1,2.50,0,1,2026-04-25,blank,2,session_import
+detrimental,2026-04-26,1,2.50,0,1,2026-04-25,blank,2,session_import

@@ -1,1 +1,4 @@
 word_a,word_b,reason,count,last_seen,example_hint
+inducement,conjecture,inducement는 유인/동기이고 conjecture는 추측이라 답안 추측과 의미가 다름,1,2026-04-25,bonus as an inducement=유인; make a conjecture=추측하다
+allegiance,alliance,allegiance는 충성이고 alliance는 동맹/아군 쪽이라 형태가 비슷해도 의미가 다름,1,2026-04-25,pledge allegiance=충성을 맹세하다; form an alliance=동맹을 맺다
+markedly,impressively,markedly는 현저하게/뚜렷하게이고 impressively는 인상 깊게라 결과 변화 정도를 나타내지 않음,1,2026-04-25,improve markedly=현저하게 향상되다; perform impressively=인상 깊게 해내다

@@ -34,6 +34,8 @@ body {
 }
 
 button,
+input,
+select,
 textarea {
   font: inherit;
 }
@@ -233,6 +235,80 @@ h3 {
   gap: 10px;
   flex-wrap: wrap;
   margin-top: 14px;
+}
+
+.form-row {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.number-input,
+.select-input,
+.search-input {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid #cbd5d0;
+  border-radius: var(--radius);
+  background: #fff;
+  color: var(--ink);
+}
+
+.number-input:focus,
+.select-input:focus,
+.search-input:focus {
+  border-color: var(--brand-2);
+  outline: 3px solid rgba(46, 111, 105, 0.18);
+}
+
+.stats-controls {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.score-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: #e9f2ef;
+  color: var(--brand-2);
+  font-size: 12px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.deck-badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.deck-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  padding: 2px 7px;
+  border: 1px solid #cbd5d0;
+  border-radius: 999px;
+  background: var(--surface-strong);
+  color: var(--brand-2);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.meta-note {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.35;
 }
 
 .primary-button,

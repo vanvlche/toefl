@@ -2,16 +2,37 @@
   "use strict";
 
   const STORAGE_KEY = "toefl-vocab-pwa-progress-v1";
-  const SEED_URL = "./data/seed_words.json";
+  const SCHEDULER_SETTINGS_KEY = "toefl-vocab-pwa-scheduler-settings-v1";
+  const SCRIPT_BASE_URL = document.currentScript && document.currentScript.src
+    ? document.currentScript.src
+    : document.baseURI;
+  const SEED_URL = new URL("data/seed_words.json", SCRIPT_BASE_URL).toString();
   const SEED_REFRESH_INTERVAL_MS = 60 * 1000;
   const INTERVALS = [1, 3, 7, 14, 30];
+  const ALLOWED_DESIRED_RETENTIONS = [0.85, 0.9, 0.95];
+  const DEFAULT_SCHEDULER_SETTINGS = {
+    schedulerVersion: 2,
+    desiredRetention: 0.9,
+    schedulerMode: "adaptive",
+    maxIntervalDays: 365,
+    learningSuccessTarget: 3
+  };
 
   const app = {
     seed: null,
     words: [],
     progress: null,
+    schedulerSettings: null,
     route: { name: "today", params: {} },
     quiz: null,
+    lastQuizSummary: null,
+    customQuizCount: 10,
+    selectedDeckId: "all",
+    deckQuizCount: 10,
+    lastGeneratedQuizWords: [],
+    statsSort: "recommended",
+    statsSearch: "",
+    statsDeckId: "all",
     answerDraft: "",
     lastResult: null,
     serviceWorkerStatus: "unavailable"
@@ -30,6 +51,8 @@
     wireShell();
     wireDesktopActions();
     await registerServiceWorker();
+    app.schedulerSettings = loadSchedulerSettings();
+    saveSchedulerSettings();
 
     try {
       app.seed = await fetchFreshSeed();
@@ -54,7 +77,7 @@
     });
 
     backButton.addEventListener("click", () => {
-      if (app.route.name === "quiz" || app.route.name === "result") {
+      if (app.route.name === "quiz" || app.route.name === "result" || app.route.name === "summary") {
         navigate("today");
       } else {
         history.back();
@@ -199,6 +222,45 @@
     return Boolean(window.toeflDesktop && window.toeflDesktop.isDesktop);
   }
 
+  function loadSchedulerSettings() {
+    const raw = localStorage.getItem(SCHEDULER_SETTINGS_KEY);
+    if (!raw) {
+      return normalizeSchedulerSettings(null);
+    }
+
+    try {
+      return normalizeSchedulerSettings(JSON.parse(raw));
+    } catch {
+      return normalizeSchedulerSettings(null);
+    }
+  }
+
+  function saveSchedulerSettings() {
+    app.schedulerSettings = normalizeSchedulerSettings(app.schedulerSettings);
+    localStorage.setItem(SCHEDULER_SETTINGS_KEY, JSON.stringify(app.schedulerSettings));
+  }
+
+  function normalizeSchedulerSettings(settings) {
+    const source = settings && typeof settings === "object" ? settings : {};
+    const desiredRetention = normalizeDesiredRetention(source.desiredRetention);
+    const maxIntervalDays = Math.round(clampNumber(source.maxIntervalDays, 1, 3650, DEFAULT_SCHEDULER_SETTINGS.maxIntervalDays));
+    const learningSuccessTarget = Math.round(clampNumber(source.learningSuccessTarget, 1, 10, DEFAULT_SCHEDULER_SETTINGS.learningSuccessTarget));
+
+    return {
+      schedulerVersion: 2,
+      desiredRetention,
+      schedulerMode: source.schedulerMode === "adaptive" ? "adaptive" : DEFAULT_SCHEDULER_SETTINGS.schedulerMode,
+      maxIntervalDays,
+      learningSuccessTarget
+    };
+  }
+
+  function normalizeDesiredRetention(value) {
+    const number = Number(value);
+    const matched = ALLOWED_DESIRED_RETENTIONS.find((item) => Math.abs(item - number) < 0.001);
+    return matched || DEFAULT_SCHEDULER_SETTINGS.desiredRetention;
+  }
+
   function loadProgress(seed) {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) {
@@ -218,7 +280,9 @@
     const importedAttemptIds = {};
 
     (seed.words || []).forEach((word) => {
-      reviewStates[word.word] = normalizeReviewState(word);
+      reviewStates[word.word] = normalizeReviewState(word, null, {
+        hasAttempts: Array.isArray(word.wrong_attempts) && word.wrong_attempts.length > 0
+      });
       (word.wrong_attempts || []).forEach((attempt) => {
         const normalized = normalizeSeedAttempt(attempt);
         attempts.push(normalized);
@@ -245,11 +309,10 @@
       attempts: Array.isArray(progress.attempts) ? progress.attempts : [],
       importedAttemptIds: progress.importedAttemptIds || {}
     };
+    const seedWordsByWord = new Map();
 
     (seed.words || []).forEach((word) => {
-      if (!safeProgress.reviewStates[word.word]) {
-        safeProgress.reviewStates[word.word] = normalizeReviewState(word);
-      }
+      seedWordsByWord.set(word.word, word);
 
       (word.wrong_attempts || []).forEach((attempt) => {
         const normalized = normalizeSeedAttempt(attempt);
@@ -260,23 +323,71 @@
       });
     });
 
+    const attemptWordCounts = {};
+    safeProgress.attempts.forEach((attempt) => {
+      const word = attempt && attempt.word ? attempt.word : "";
+      if (!word) return;
+      attemptWordCounts[word] = (attemptWordCounts[word] || 0) + 1;
+    });
+
+    (seed.words || []).forEach((word) => {
+      safeProgress.reviewStates[word.word] = normalizeReviewState(word, safeProgress.reviewStates[word.word], {
+        hasAttempts: Boolean(attemptWordCounts[word.word])
+      });
+    });
+
+    Object.keys(safeProgress.reviewStates).forEach((word) => {
+      const entry = seedWordsByWord.get(word) || { word };
+      safeProgress.reviewStates[word] = normalizeReviewState(entry, safeProgress.reviewStates[word], {
+        hasAttempts: Boolean(attemptWordCounts[word])
+      });
+    });
+
     safeProgress.seedGeneratedAt = seed.generated_at || safeProgress.seedGeneratedAt;
     return safeProgress;
   }
 
-  function normalizeReviewState(word) {
+  function normalizeReviewState(word, existingState = null, options = {}) {
     const seedState = word.review_state || {};
+    const existing = existingState && typeof existingState === "object" ? existingState : null;
+    const source = existing || seedState;
+    const merged = { ...seedState, ...source };
+    const wordText = merged.word || word.word || "";
+    const intervalDays = Math.round(clampNumber(merged.interval_days, 0, getMaxIntervalDays(), 1));
+    const lastSeen = merged.last_seen || "";
+    const lastReviewedAt = merged.last_reviewed_at || lastSeen || "";
+    const lastVerdict = merged.last_verdict || "";
+    const hasAttempts = Boolean(options.hasAttempts);
+    const hasBeenSeen = Boolean(lastSeen || lastReviewedAt || hasAttempts);
+    const existingPhase = normalizeLearningPhaseValue(merged.learning_phase);
+    const learningPhase = existingPhase || (hasBeenSeen ? "review" : "new");
+    const desiredRetention = normalizeDesiredRetention(
+      merged.desired_retention ?? (app.schedulerSettings && app.schedulerSettings.desiredRetention)
+    );
+
     return {
-      word: word.word,
-      next_review_date: seedState.next_review_date || todayString(),
-      interval_days: Number(seedState.interval_days ?? 1),
-      ease: Number(seedState.ease ?? 2.5),
-      consecutive_correct: Number(seedState.consecutive_correct ?? 0),
-      total_wrong: Number(seedState.total_wrong ?? 0),
-      last_seen: seedState.last_seen || "",
-      last_verdict: seedState.last_verdict || "",
-      priority: Number(seedState.priority ?? 1),
-      notes: seedState.notes || ""
+      ...merged,
+      word: wordText,
+      next_review_date: merged.next_review_date || todayString(),
+      interval_days: intervalDays,
+      ease: clampNumber(merged.ease, 1.3, 3.0, 2.5),
+      consecutive_correct: Math.max(0, Math.round(clampNumber(merged.consecutive_correct, 0, 1000000, 0))),
+      total_wrong: Math.max(0, Math.round(clampNumber(merged.total_wrong, 0, 1000000, 0))),
+      last_seen: lastSeen,
+      last_verdict: lastVerdict,
+      priority: Math.max(1, Math.round(clampNumber(merged.priority, 1, 1000000, 1))),
+      notes: merged.notes || "",
+      scheduler_version: 2,
+      stability_days: clampNumber(merged.stability_days, 0.5, getMaxIntervalDays(), intervalDays > 0 ? intervalDays : 1),
+      difficulty: clampNumber(merged.difficulty, 0.1, 0.95, 0.5),
+      retrievability: clamp01(merged.retrievability ?? 1),
+      lapses: Math.max(0, Math.round(clampNumber(merged.lapses, 0, 1000000, 0))),
+      first_seen: merged.first_seen || lastSeen || "",
+      last_reviewed_at: lastReviewedAt,
+      last_success_at: merged.last_success_at || (lastVerdict === "correct" ? lastSeen : ""),
+      initial_correct_count: Math.max(0, Math.round(clampNumber(merged.initial_correct_count, 0, 1000000, 0))),
+      learning_phase: learningPhase,
+      desired_retention: desiredRetention
     };
   }
 
@@ -322,6 +433,8 @@
     app.route = { name, params: {} };
     if (name === "word" && rawParam) {
       app.route.params.word = rawParam;
+    } else if (name === "deck" && rawParam) {
+      app.route.params.deckId = rawParam;
     }
   }
 
@@ -329,6 +442,8 @@
     let nextHash = `#${encodeURIComponent(name)}`;
     if (name === "word" && params.word) {
       nextHash = `#word:${encodeURIComponent(params.word)}`;
+    } else if (name === "deck" && params.deckId) {
+      nextHash = `#deck:${encodeURIComponent(params.deckId)}`;
     }
 
     if (window.location.hash === nextHash) {
@@ -350,11 +465,20 @@
       case "result":
         renderResult();
         break;
+      case "summary":
+        renderQuizSummary();
+        break;
       case "wrong":
         renderWrongAnswers();
         break;
+      case "stats":
+        renderWordStats();
+        break;
       case "word":
         renderWordDetail(app.route.params.word);
+        break;
+      case "deck":
+        renderDeckDetail(app.route.params.deckId || app.selectedDeckId || "all");
         break;
       case "settings":
         renderSettings();
@@ -373,8 +497,11 @@
       today: "Today Review",
       quiz: "Quiz",
       result: "Result",
+      summary: "퀴즈 요약",
       wrong: "Wrong Answers",
+      stats: "단어별 통계",
       word: "Word Detail",
+      deck: "Deck",
       settings: "Settings"
     };
     title.textContent = titles[app.route.name] || "TOEFL Vocab";
@@ -387,8 +514,13 @@
 
   function renderTodayReview() {
     const due = getDueWords();
-    const attempts = app.progress.attempts || [];
+    const attempts = app.progress && Array.isArray(app.progress.attempts) ? app.progress.attempts : [];
     const weakCount = attempts.filter((attempt) => attempt.verdict !== "correct").length;
+    const allStats = computeAllWordStats();
+    const riskStats = allStats.filter((stats) => stats.isRisk);
+    const learningStats = allStats.filter((stats) => ["new", "learning", "relearning"].includes(stats.learningPhase));
+    const matureStats = allStats.filter((stats) => stats.learningPhase === "mature");
+    const desiredRetention = getSchedulerSettings().desiredRetention;
 
     screen.append(
       el("section", { className: "hero" }, [
@@ -407,6 +539,56 @@
       ])
     );
 
+    screen.append(
+      el("section", { className: "section" }, [
+        el("h2", {}, "Adaptive Review"),
+        el("div", { className: "stat-grid" }, [
+          stat(String(riskStats.length), "위험 단어"),
+          stat(String(learningStats.length), "Learning"),
+          stat(String(matureStats.length), "Mature"),
+          stat(formatPercent(desiredRetention), "목표 기억률")
+        ]),
+        el("div", { className: "button-row" }, [
+          button("위험 단어 퀴즈", "secondary-button", () => startQuiz(riskStats.map((stats) => stats.entry)), riskStats.length === 0),
+          button("초기 학습 단어 퀴즈", "secondary-button", () => startQuiz(learningStats.map((stats) => stats.entry)), learningStats.length === 0)
+        ])
+      ])
+    );
+
+    const customCount = clampQuizCount(app.customQuizCount);
+    const customCountInput = el("input", {
+      className: "number-input",
+      type: "number",
+      min: "1",
+      max: String(Math.max(1, app.words.length)),
+      value: String(customCount),
+      inputMode: "numeric"
+    });
+
+    screen.append(
+      el("section", { className: "section" }, [
+        el("h2", {}, "맞춤 퀴즈 생성"),
+        el("p", { className: "row-subtitle" }, "오답률, 최근 오답, 복습 예정일, 오래 안 본 정도를 반영해 단어를 뽑습니다."),
+        el("label", { className: "form-row" }, [
+          el("span", {}, "퀴즈 단어 수"),
+          customCountInput
+        ]),
+        el("div", { className: "button-row" }, [
+          button("맞춤 퀴즈 시작", "primary-button", () => {
+            const count = clampQuizCount(customCountInput.value);
+            app.customQuizCount = count;
+            const words = sampleWeightedWords(count);
+            app.lastGeneratedQuizWords = words;
+            showToast(`${words.length}개 단어로 맞춤 퀴즈를 만들었습니다.`);
+            startQuiz(words);
+          }, app.words.length === 0),
+          button("단어별 통계 보기", "secondary-button", () => navigate("stats"))
+        ])
+      ])
+    );
+
+    renderDeckLearningSection();
+
     const section = el("section", { className: "section" }, [el("h2", {}, "복습 목록")]);
     if (due.length === 0) {
       section.append(emptyState("오늘 예정된 복습이 없습니다."));
@@ -414,6 +596,77 @@
       section.append(wordList(due));
     }
     screen.append(section);
+  }
+
+  function renderDeckLearningSection() {
+    const decks = getDecks();
+    const hasDecks = decks.length > 0;
+    const selectedDeckId = normalizeSelectedDeckId(app.selectedDeckId);
+    app.selectedDeckId = selectedDeckId;
+    const deckWords = getWordsForDeck(selectedDeckId);
+    const deckDueCount = getDueWords().filter((entry) => wordBelongsToDeck(entry, selectedDeckId)).length;
+    const deckWeakCount = deckWords.filter((entry) => getWordAttempts(entry.word).some(isMissAttempt)).length;
+    const deckQuizCount = clampDeckQuizCount(app.deckQuizCount, selectedDeckId);
+    if (deckQuizCount > 0) {
+      app.deckQuizCount = deckQuizCount;
+    }
+
+    const deckSelect = el("select", {
+      className: "select-input",
+      value: selectedDeckId,
+      onchange: (event) => {
+        app.selectedDeckId = normalizeSelectedDeckId(event.target.value);
+        app.deckQuizCount = clampDeckQuizCount(app.deckQuizCount, app.selectedDeckId);
+        render();
+      }
+    }, [
+      el("option", { value: "all", selected: selectedDeckId === "all" }, "전체 단어"),
+      ...decks.map((deck) => (
+        el("option", { value: deck.deck_id, selected: selectedDeckId === deck.deck_id }, deck.display_name || deck.deck_id)
+      ))
+    ]);
+    const countInput = el("input", {
+      className: "number-input",
+      type: "number",
+      min: "1",
+      max: String(Math.max(1, deckWords.length)),
+      value: String(deckQuizCount || 1),
+      inputMode: "numeric",
+      oninput: (event) => {
+        app.deckQuizCount = clampDeckQuizCount(event.target.value, app.selectedDeckId);
+      }
+    });
+
+    screen.append(
+      el("section", { className: "section" }, [
+        el("h2", {}, "Deck별 학습"),
+        el("p", { className: "row-subtitle" }, "Deck을 선택해서 해당 단어만 보거나, 선택한 Deck으로 퀴즈를 만들 수 있습니다."),
+        hasDecks ? el("div", {}, [
+          el("label", { className: "form-row" }, [
+            el("span", {}, "Deck"),
+            deckSelect
+          ]),
+          el("label", { className: "form-row" }, [
+            el("span", {}, "퀴즈 단어 수"),
+            countInput
+          ]),
+          el("p", { className: "meta-note" }, `선택 단어 ${deckWords.length}개 · Due ${deckDueCount}개 · Weak ${deckWeakCount}개`),
+          el("div", { className: "button-row" }, [
+            button("선택 Deck 단어 보기", "secondary-button", () => navigate("deck", { deckId: selectedDeckId }), deckWords.length === 0),
+            button("선택 Deck 퀴즈 시작", "primary-button", () => {
+              const count = clampDeckQuizCount(countInput.value, selectedDeckId);
+              app.deckQuizCount = count;
+              startDeckQuiz(selectedDeckId, { count, weighted: false });
+            }, deckWords.length === 0),
+            button("선택 Deck 가중치 퀴즈", "secondary-button", () => {
+              const count = clampDeckQuizCount(countInput.value, selectedDeckId);
+              app.deckQuizCount = count;
+              startDeckQuiz(selectedDeckId, { count, weighted: true });
+            }, deckWords.length === 0)
+          ])
+        ]) : emptyState("아직 deck 태그가 없습니다. scripts/import_decks.py --apply 후 web seed를 다시 생성해 주세요.")
+      ])
+    );
   }
 
   function renderQuiz() {
@@ -486,6 +739,27 @@
     }
 
     const { result, entry } = app.lastResult;
+    const continueLabel = isLastQuizResult() ? "요약 보기" : "다음";
+    let actionPanel = null;
+    if (result.verdict === "correct") {
+      actionPanel = el("div", { className: "section" }, [
+        el("h2", {}, "이번 회상 난이도"),
+        el("div", { className: "button-row" }, [
+          button("쉬웠음", "primary-button", () => finalizeCurrentResult("easy")),
+          button("보통", "secondary-button", () => finalizeCurrentResult("good")),
+          button("어려웠음", "secondary-button", () => finalizeCurrentResult("hard"))
+        ])
+      ]);
+    } else if (result.verdict === "partial") {
+      actionPanel = el("div", { className: "button-row" }, [
+        button("부분 정답으로 기록하고 계속", "primary-button", () => finalizeCurrentResult("hard"))
+      ]);
+    } else {
+      actionPanel = el("div", { className: "button-row" }, [
+        button(continueLabel, "primary-button", () => finalizeCurrentResult("again"))
+      ]);
+    }
+
     screen.append(
       el("section", { className: "result-panel" }, [
         el("div", { className: "row-title" }, [
@@ -502,9 +776,45 @@
           ["오류 유형", result.error_types.length ? result.error_types.join(", ") : "없음"],
           ["신뢰도", result.confidence]
         ]),
+        actionPanel,
         el("div", { className: "button-row" }, [
-          button("다음", "primary-button", nextQuizItem),
           button("단어 상세", "secondary-button", () => navigate("word", { word: entry.word }))
+        ])
+      ])
+    );
+  }
+
+  function renderQuizSummary() {
+    const summary = app.lastQuizSummary;
+    if (!summary) {
+      screen.append(
+        el("section", { className: "empty-state" }, [
+          el("p", {}, "표시할 퀴즈 요약이 없습니다."),
+          el("div", { className: "button-row" }, [
+            button("Today로 이동", "primary-button", () => navigate("today"))
+          ])
+        ])
+      );
+      return;
+    }
+
+    screen.append(
+      el("section", { className: "result-panel" }, [
+        el("h2", {}, "퀴즈 요약"),
+        el("div", { className: "stat-grid" }, [
+          stat(String(summary.totalAttempted), "시도한 단어"),
+          stat(String(summary.correctCount), "맞은 단어"),
+          stat(formatElapsedTime(summary.elapsedMs), "걸린 시간"),
+          stat(`${summary.accuracyPercent}%`, "정답률")
+        ]),
+        fieldList([
+          ["부분 정답", String(summary.partialCount)],
+          ["오답", String(summary.wrongCount)],
+          ["미응답", String(summary.blankCount)]
+        ]),
+        el("div", { className: "button-row" }, [
+          button("Today로 이동", "primary-button", () => navigate("today")),
+          button("오답 보기", "secondary-button", () => navigate("wrong"))
         ])
       ])
     );
@@ -546,6 +856,192 @@
     screen.append(section);
   }
 
+  function renderWordStats() {
+    const selectedDeckId = normalizeSelectedDeckId(app.statsDeckId || "all");
+    app.statsDeckId = selectedDeckId;
+    const allStats = getWordsForDeck(selectedDeckId).map(computeWordStats);
+    const totalAttempts = allStats.reduce((sum, stats) => sum + stats.totalAttempts, 0);
+    const weakWords = allStats.filter((stats) => stats.missCount > 0).length;
+    const dueWords = allStats.filter((stats) => stats.isDue).length;
+    const averageRetrievability = allStats.length
+      ? allStats.reduce((sum, stats) => sum + stats.retrievability, 0) / allStats.length
+      : 0;
+    const learningWords = allStats.filter((stats) => ["new", "learning", "relearning"].includes(stats.learningPhase)).length;
+    const averageStability = allStats.length
+      ? allStats.reduce((sum, stats) => sum + stats.stabilityDays, 0) / allStats.length
+      : 0;
+    const averageDifficulty = allStats.length
+      ? allStats.reduce((sum, stats) => sum + stats.difficulty, 0) / allStats.length
+      : 0;
+    const totalLapses = allStats.reduce((sum, stats) => sum + stats.lapses, 0);
+    app.statsSort = app.statsSort || "recommended";
+    app.statsSearch = app.statsSearch || "";
+
+    screen.append(
+      el("section", { className: "stat-grid" }, [
+        stat(String(allStats.length), selectedDeckId === "all" ? "전체 단어" : `${getDeckLabel(selectedDeckId)} 단어`),
+        stat(String(totalAttempts), "전체 시도"),
+        stat(String(weakWords), "약한 단어"),
+        stat(String(dueWords), "복습 예정"),
+        stat(formatPercent(averageRetrievability), "현재 추정 기억률"),
+        stat(String(learningWords), "학습 단계"),
+        stat(formatDays(averageStability), "기억 안정도"),
+        stat(formatDecimal(averageDifficulty, 2), "난이도"),
+        stat(String(totalLapses), "실패 누적")
+      ])
+    );
+
+    const sortSelect = el("select", {
+      className: "select-input",
+      value: app.statsSort,
+      onchange: (event) => {
+        app.statsSort = event.target.value;
+        renderStatsRows();
+      }
+    }, [
+      el("option", { value: "recommended", selected: app.statsSort === "recommended" }, "추천순"),
+      el("option", { value: "wrongRate", selected: app.statsSort === "wrongRate" }, "오답률 높은 순"),
+      el("option", { value: "recentMiss", selected: app.statsSort === "recentMiss" }, "최근 오답순"),
+      el("option", { value: "retrievability", selected: app.statsSort === "retrievability" }, "기억률 낮은 순"),
+      el("option", { value: "risk", selected: app.statsSort === "risk" }, "위험 단어순"),
+      el("option", { value: "stale", selected: app.statsSort === "stale" }, "오래 안 본 순"),
+      el("option", { value: "attempts", selected: app.statsSort === "attempts" }, "시도 횟수 많은 순"),
+      el("option", { value: "alpha", selected: app.statsSort === "alpha" }, "알파벳순")
+    ]);
+    const searchInput = el("input", {
+      className: "search-input",
+      type: "search",
+      placeholder: "단어 검색",
+      value: app.statsSearch,
+      oninput: (event) => {
+        app.statsSearch = event.target.value;
+        renderStatsRows();
+      }
+    });
+    const deckSelect = el("select", {
+      className: "select-input",
+      value: selectedDeckId,
+      onchange: (event) => {
+        app.statsDeckId = normalizeSelectedDeckId(event.target.value);
+        render();
+      }
+    }, [
+      el("option", { value: "all", selected: selectedDeckId === "all" }, "전체 단어"),
+      ...getDecks().map((deck) => (
+        el("option", { value: deck.deck_id, selected: selectedDeckId === deck.deck_id }, deck.display_name || deck.deck_id)
+      ))
+    ]);
+    const listHost = el("div", { className: "list" });
+
+    screen.append(
+      el("section", { className: "section" }, [
+        el("h2", {}, "단어별 통계"),
+        el("div", { className: "stats-controls" }, [
+          deckSelect,
+          sortSelect,
+          searchInput
+        ]),
+        listHost
+      ])
+    );
+
+    renderStatsRows();
+
+    function renderStatsRows() {
+      const filtered = filterWordStats(allStats, app.statsSearch);
+      const sorted = sortWordStats(filtered, app.statsSort);
+      listHost.replaceChildren();
+
+      if (sorted.length === 0) {
+        listHost.append(emptyState("검색 결과가 없습니다."));
+        return;
+      }
+
+      sorted.forEach((stats) => {
+        listHost.append(
+          el("button", { className: "row", type: "button", onclick: () => navigate("word", { word: stats.word }) }, [
+            el("div", { className: "row-main" }, [
+              el("p", { className: "row-title" }, [
+                el("span", {}, stats.word),
+                el("span", { className: "score-pill" }, `점수 ${formatScore(stats.weightedScore)}`)
+              ]),
+              el("p", { className: "row-subtitle" }, stats.entry.core_meaning_ko || stats.entry.alt_meanings_ko || ""),
+              deckBadgeRow(stats.entry),
+              el("p", { className: "row-subtitle" }, `시도 ${stats.totalAttempts} · 정답 ${stats.correctCount} · 오답/부분/미응답 ${stats.missCount} · 오답률 ${formatPercent(stats.wrongRate)} · 점수 ${formatScore(stats.weightedScore)}`),
+              el("p", { className: "row-subtitle" }, `기억률 ${formatPercent(stats.retrievability)} · 단계 ${formatLearningPhase(stats.learningPhase)} · 안정도 ${formatDays(stats.stabilityDays)} · 난이도 ${formatDecimal(stats.difficulty, 2)} · 실패 ${stats.lapses}`)
+            ]),
+            el("span", { className: "row-meta" }, `다음 ${stats.nextReviewDate || "없음"}`)
+          ])
+        );
+      });
+    }
+  }
+
+  function renderDeckDetail(deckId) {
+    const selectedDeckId = normalizeSelectedDeckId(deckId);
+    app.selectedDeckId = selectedDeckId;
+    const deckWords = getWordsForDeck(selectedDeckId);
+    const deckStats = deckWords.map(computeWordStats);
+    const dueCount = deckStats.filter((stats) => stats.isDue).length;
+    const weakCount = deckStats.filter((stats) => stats.missCount > 0).length;
+    const attemptCount = deckStats.reduce((sum, stats) => sum + stats.totalAttempts, 0);
+    const deckQuizCount = clampDeckQuizCount(app.deckQuizCount, selectedDeckId);
+    if (deckQuizCount > 0) {
+      app.deckQuizCount = deckQuizCount;
+    }
+
+    const countInput = el("input", {
+      className: "number-input",
+      type: "number",
+      min: "1",
+      max: String(Math.max(1, deckWords.length)),
+      value: String(deckQuizCount || 1),
+      inputMode: "numeric",
+      oninput: (event) => {
+        app.deckQuizCount = clampDeckQuizCount(event.target.value, selectedDeckId);
+      }
+    });
+    const heading = selectedDeckId === "all" ? "전체 단어" : `${getDeckLabel(selectedDeckId)} Deck`;
+
+    screen.append(
+      el("section", { className: "detail-panel" }, [
+        el("p", { className: "quiz-pos" }, "Deck"),
+        el("h2", { className: "quiz-word" }, heading),
+        el("div", { className: "stat-grid" }, [
+          stat(String(deckWords.length), "단어 수"),
+          stat(String(dueCount), "Due"),
+          stat(String(weakCount), "Weak"),
+          stat(String(attemptCount), "시도")
+        ]),
+        el("label", { className: "form-row" }, [
+          el("span", {}, "퀴즈 단어 수"),
+          countInput
+        ]),
+        el("div", { className: "button-row" }, [
+          button("이 Deck 퀴즈 시작", "primary-button", () => {
+            const count = clampDeckQuizCount(countInput.value, selectedDeckId);
+            app.deckQuizCount = count;
+            startDeckQuiz(selectedDeckId, { count, weighted: false });
+          }, deckWords.length === 0),
+          button("이 Deck 가중치 퀴즈", "secondary-button", () => {
+            const count = clampDeckQuizCount(countInput.value, selectedDeckId);
+            app.deckQuizCount = count;
+            startDeckQuiz(selectedDeckId, { count, weighted: true });
+          }, deckWords.length === 0),
+          button("Today", "secondary-button", () => navigate("today"))
+        ])
+      ])
+    );
+
+    const section = el("section", { className: "section" }, [el("h2", {}, "단어 목록")]);
+    if (deckWords.length === 0) {
+      section.append(emptyState("이 Deck에 표시할 단어가 없습니다."));
+    } else {
+      section.append(deckWordList(deckWords));
+    }
+    screen.append(section);
+  }
+
   function renderWordDetail(word) {
     const entry = findWord(word);
     if (!entry) {
@@ -553,9 +1049,10 @@
       return;
     }
 
-    const review = app.progress.reviewStates[entry.word] || normalizeReviewState(entry);
-    const attempts = (app.progress.attempts || [])
-      .filter((attempt) => attempt.word === entry.word)
+    const stats = computeWordStats(entry);
+    const review = stats.reviewState;
+    const deckIds = getWordDeckIds(entry);
+    const attempts = getWordAttempts(entry.word)
       .sort((a, b) => String(b.timestamp).localeCompare(String(a.timestamp)));
 
     screen.append(
@@ -568,7 +1065,27 @@
           ["허용 paraphrase", entry.accepted_paraphrases_ko || "없음"],
           ["예문", [entry.example_en, entry.example_ko].filter(Boolean).join("\n") || "없음"],
           ["채점 메모", [entry.grading_notes, entry.common_confusions_ko, entry.evidence_hint].filter(Boolean).join("\n") || "없음"],
-          ["복습 상태", `next=${review.next_review_date}, interval=${review.interval_days}, priority=${review.priority}, wrong=${review.total_wrong}`]
+          ["Deck", deckIds.length ? deckIds.join(", ") : "없음"],
+          ["Primary Deck", entry.primary_deck_id || "없음"],
+          ["복습 상태", `next=${review.next_review_date}, interval=${review.interval_days}, priority=${review.priority}, wrong=${review.total_wrong}`],
+          ["학습 단계", formatLearningPhase(stats.learningPhase)],
+          ["현재 추정 기억률", formatPercent(stats.retrievability)],
+          ["목표 기억률", formatPercent(stats.desiredRetention)],
+          ["기억 안정도", formatDays(stats.stabilityDays)],
+          ["난이도", formatDecimal(stats.difficulty, 2)],
+          ["실패 누적", String(stats.lapses)],
+          ["다음 복습", review.next_review_date || "없음"],
+          ["최근 복습", formatDateTimeShort(review.last_reviewed_at || review.last_seen)],
+          ["최근 성공", formatDateTimeShort(review.last_success_at)],
+          ["시도 횟수", String(stats.totalAttempts)],
+          ["정답", String(stats.correctCount)],
+          ["부분 정답", String(stats.partialCount)],
+          ["오답", String(stats.wrongCount)],
+          ["미응답", String(stats.blankCount)],
+          ["오답률", formatPercent(stats.wrongRate)],
+          ["최근 시도", formatDateTimeShort(stats.lastAttemptAt)],
+          ["최근 오답", formatDateTimeShort(stats.lastMissAt)],
+          ["가중치 점수", formatScore(stats.weightedScore)]
         ]),
         el("div", { className: "button-row" }, [
           button("이 단어 퀴즈", "primary-button", () => startQuiz([entry])),
@@ -626,6 +1143,40 @@
       ])
     );
 
+    const schedulerSettings = getSchedulerSettings();
+    const retentionSelect = el("select", {
+      className: "select-input",
+      value: String(schedulerSettings.desiredRetention),
+      onchange: (event) => {
+        app.schedulerSettings = normalizeSchedulerSettings({
+          ...schedulerSettings,
+          desiredRetention: Number(event.target.value)
+        });
+        saveSchedulerSettings();
+        showToast("목표 기억률을 저장했습니다. 다음 채점부터 적용됩니다.");
+        render();
+      }
+    }, [
+      el("option", { value: "0.85", selected: schedulerSettings.desiredRetention === 0.85 }, "85% 효율 우선"),
+      el("option", { value: "0.9", selected: schedulerSettings.desiredRetention === 0.9 }, "90% 균형"),
+      el("option", { value: "0.95", selected: schedulerSettings.desiredRetention === 0.95 }, "95% 정확도 우선")
+    ]);
+
+    screen.append(
+      el("section", { className: "section settings-panel" }, [
+        el("h2", {}, "복습 스케줄"),
+        el("label", { className: "form-row" }, [
+          el("span", {}, "목표 기억률"),
+          retentionSelect
+        ]),
+        fieldList([
+          ["스케줄 모드", schedulerSettings.schedulerMode],
+          ["Learning 성공 기준", `${schedulerSettings.learningSuccessTarget}회 성공 회상`],
+          ["설명", "목표 기억률을 높이면 다음 복습 간격이 짧아지고 복습량이 늘어납니다."]
+        ])
+      ])
+    );
+
     screen.append(
       el("section", { className: "section settings-panel" }, [
         el("h2", {}, "현재 채점 방식"),
@@ -640,7 +1191,16 @@
 
   function startQuiz(words, silent = false) {
     const quizWords = (words && words.length ? words : getDueWords()).slice();
-    app.quiz = { words: quizWords, index: 0 };
+    app.quiz = {
+      words: quizWords,
+      index: 0,
+      startedAt: new Date().toISOString(),
+      startedAtMs: Date.now(),
+      completedAt: "",
+      completedAtMs: null,
+      results: []
+    };
+    app.lastQuizSummary = null;
     app.answerDraft = "";
     app.lastResult = null;
     if (!silent) {
@@ -650,7 +1210,6 @@
 
   function submitAnswer(entry) {
     const result = gradeAnswer(app.answerDraft, entry);
-    applySchedule(result, entry.word);
     const attempt = {
       id: `local-${Date.now()}-${hashText(`${entry.word}|${app.answerDraft}`)}`,
       source: "local",
@@ -658,10 +1217,51 @@
       session_id: "pwa-local",
       ...result
     };
-    app.progress.attempts.push(attempt);
-    saveProgress();
-    app.lastResult = { result, entry };
+    app.lastResult = { result, entry, attempt, finalized: false };
     navigate("result");
+  }
+
+  function finalizeCurrentResult(effort = "good") {
+    if (!app.lastResult) {
+      return;
+    }
+    if (app.lastResult.finalized) {
+      nextQuizItem();
+      return;
+    }
+
+    const { result, entry, attempt } = app.lastResult;
+    applySchedule(result, entry.word, effort);
+    const review = app.progress.reviewStates[entry.word] || {};
+    attempt.recall_effort = effort;
+    attempt.scheduler_version = 2;
+    attempt.scheduled_next_review_date = review.next_review_date || "";
+    attempt.scheduled_interval_days = review.interval_days;
+    attempt.stability_days = review.stability_days;
+    attempt.difficulty = review.difficulty;
+    attempt.retrievability = review.retrievability;
+    app.progress.attempts.push(attempt);
+    if (app.quiz) {
+      app.quiz.results[app.quiz.index] = {
+        word: entry.word,
+        verdict: result.verdict,
+        timestamp: attempt.timestamp,
+        recall_effort: attempt.recall_effort,
+        scheduled_next_review_date: attempt.scheduled_next_review_date,
+        scheduled_interval_days: attempt.scheduled_interval_days,
+        stability_days: attempt.stability_days,
+        difficulty: attempt.difficulty,
+        retrievability: attempt.retrievability
+      };
+      if (app.quiz.index >= app.quiz.words.length - 1) {
+        const completedAtMs = Date.now();
+        app.quiz.completedAt = new Date(completedAtMs).toISOString();
+        app.quiz.completedAtMs = completedAtMs;
+      }
+    }
+    app.lastResult.finalized = true;
+    saveProgress();
+    nextQuizItem();
   }
 
   function nextQuizItem() {
@@ -675,11 +1275,61 @@
     app.lastResult = null;
 
     if (app.quiz.index >= app.quiz.words.length) {
+      app.lastQuizSummary = buildQuizSummary(app.quiz);
       app.quiz = null;
-      navigate("today");
+      navigate("summary");
     } else {
       navigate("quiz");
     }
+  }
+
+  function isLastQuizResult() {
+    return Boolean(app.quiz && app.quiz.index >= app.quiz.words.length - 1);
+  }
+
+  function buildQuizSummary(quiz) {
+    const results = Array.isArray(quiz && quiz.results) ? quiz.results.filter(Boolean) : [];
+    const totalAttempted = results.length;
+    const correctCount = results.filter((result) => result.verdict === "correct").length;
+    const partialCount = results.filter((result) => result.verdict === "partial").length;
+    const wrongCount = results.filter((result) => result.verdict === "wrong").length;
+    const blankCount = results.filter((result) => result.verdict === "blank").length;
+    const startedAtMs = Number(quiz && quiz.startedAtMs);
+    const completedAtMs = Number(quiz && quiz.completedAtMs);
+    const elapsedMs = Number.isFinite(startedAtMs) && Number.isFinite(completedAtMs)
+      ? completedAtMs - startedAtMs
+      : 0;
+
+    return {
+      startedAt: quiz && quiz.startedAt ? quiz.startedAt : "",
+      completedAt: quiz && quiz.completedAt ? quiz.completedAt : "",
+      elapsedMs,
+      totalAttempted,
+      correctCount,
+      partialCount,
+      wrongCount,
+      blankCount,
+      accuracyPercent: totalAttempted > 0 ? Math.round((correctCount / totalAttempted) * 100) : 0,
+      words: results
+    };
+  }
+
+  function formatElapsedTime(ms) {
+    if (!Number.isFinite(ms) || ms < 0) {
+      return "0초";
+    }
+
+    const totalSeconds = Math.floor(ms / 1000);
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+    const parts = [];
+
+    if (hours > 0) parts.push(`${hours}시간`);
+    if (minutes > 0) parts.push(`${minutes}분`);
+    if (seconds > 0 || parts.length === 0) parts.push(`${seconds}초`);
+
+    return parts.join(" ");
   }
 
   function gradeAnswer(answer, entry) {
@@ -763,31 +1413,179 @@
     };
   }
 
-  function applySchedule(result, word) {
+  function clampNumber(value, min, max, fallback) {
+    const number = Number(value);
+    const safeFallback = Number.isFinite(Number(fallback)) ? Number(fallback) : min;
+    const candidate = Number.isFinite(number) ? number : safeFallback;
+    const lower = Number.isFinite(Number(min)) ? Number(min) : candidate;
+    const upper = Number.isFinite(Number(max)) ? Number(max) : candidate;
+    return Math.min(upper, Math.max(lower, candidate));
+  }
+
+  function clamp01(value) {
+    return clampNumber(value, 0, 1, 0);
+  }
+
+  function getSchedulerSettings() {
+    if (!app.schedulerSettings) {
+      app.schedulerSettings = normalizeSchedulerSettings(null);
+    }
+    return app.schedulerSettings;
+  }
+
+  function getMaxIntervalDays() {
+    return getSchedulerSettings().maxIntervalDays || DEFAULT_SCHEDULER_SETTINGS.maxIntervalDays;
+  }
+
+  function daysSinceDate(dateValue) {
+    const date = parseLocalDay(dateValue);
+    if (!date) return null;
+
+    const today = parseLocalDay(todayString());
+    const msPerDay = 24 * 60 * 60 * 1000;
+    return Math.floor((today.getTime() - date.getTime()) / msPerDay);
+  }
+
+  function estimateRetrievability(reviewState) {
+    const lastReviewedAt = reviewState && (reviewState.last_reviewed_at || reviewState.last_seen);
+    if (!lastReviewedAt) return 1;
+
+    const elapsedDays = daysSinceDate(lastReviewedAt);
+    if (elapsedDays === null) return 1;
+
+    const stability = Math.max(0.25, Number(reviewState.stability_days) || 1);
+    return clamp01(Math.pow(0.9, elapsedDays / stability));
+  }
+
+  function intervalForDesiredRetention(stabilityDays, desiredRetention) {
+    const stability = Math.max(0.5, Number(stabilityDays) || 1);
+    const retention = normalizeDesiredRetention(desiredRetention);
+    const interval = stability * Math.log(retention) / Math.log(0.9);
+    return Math.round(clampNumber(interval, 1, getMaxIntervalDays(), 1));
+  }
+
+  function updateMemoryState(review, result, effort) {
+    const settings = getSchedulerSettings();
+    const word = review && review.word ? review.word : result.word;
+    const updated = normalizeReviewState(findWord(word) || { word }, review, { hasAttempts: true });
+    const now = new Date().toISOString();
+    const today = todayString();
+    const verdict = result.verdict || "wrong";
+    const normalizedEffort = normalizeRecallEffort(effort, verdict);
+    const maxIntervalDays = settings.maxIntervalDays || DEFAULT_SCHEDULER_SETTINGS.maxIntervalDays;
+    const targetSuccesses = settings.learningSuccessTarget || DEFAULT_SCHEDULER_SETTINGS.learningSuccessTarget;
+    const oldStability = clampNumber(updated.stability_days, 0.5, maxIntervalDays, updated.interval_days > 0 ? updated.interval_days : 1);
+
+    updated.scheduler_version = 2;
+    updated.last_reviewed_at = now;
+    updated.last_seen = today;
+    updated.last_verdict = verdict;
+    updated.desired_retention = settings.desiredRetention;
+    updated.first_seen = updated.first_seen || now;
+
+    if (verdict === "correct") {
+      updated.consecutive_correct = Number(updated.consecutive_correct || 0) + 1;
+      updated.initial_correct_count = Number(updated.initial_correct_count || 0) + 1;
+      updated.last_success_at = now;
+      updated.priority = Math.max(1, Number(updated.priority || 1) - 1);
+
+      const difficultyDelta = normalizedEffort === "easy" ? -0.08 : normalizedEffort === "hard" ? 0.05 : -0.03;
+      updated.difficulty = clampNumber(Number(updated.difficulty || 0.5) + difficultyDelta, 0.1, 0.95, 0.5);
+
+      const baseMultiplier = normalizedEffort === "easy" ? 2.7 : normalizedEffort === "hard" ? 1.35 : 2.0;
+      const multiplier = baseMultiplier * (1 - updated.difficulty * 0.2);
+      updated.stability_days = clampNumber(oldStability * multiplier, 0.5, maxIntervalDays, 1);
+
+      if (updated.initial_correct_count < targetSuccesses) {
+        updated.learning_phase = "learning";
+        updated.interval_days = normalizedEffort === "easy" ? 1 : 0;
+        updated.next_review_date = addDays(today, updated.interval_days);
+      } else {
+        updated.learning_phase = updated.stability_days >= 21 ? "mature" : "review";
+        updated.interval_days = intervalForDesiredRetention(updated.stability_days, updated.desired_retention);
+        updated.next_review_date = addDays(today, updated.interval_days);
+      }
+
+      updated.ease = clampNumber(Number(updated.ease || 2.5) + (normalizedEffort === "easy" ? 0.08 : 0.03), 1.3, 3.0, 2.5);
+    } else if (verdict === "partial") {
+      updated.consecutive_correct = 0;
+      updated.total_wrong = Number(updated.total_wrong || 0) + 1;
+      updated.priority = Number(updated.priority || 1) + 1;
+      updated.difficulty = clampNumber(Number(updated.difficulty || 0.5) + 0.08, 0.1, 0.95, 0.5);
+      updated.stability_days = Math.max(0.5, oldStability * 0.75);
+      updated.learning_phase = ["new", "learning"].includes(updated.learning_phase) ? "learning" : "relearning";
+      updated.interval_days = 1;
+      updated.next_review_date = addDays(today, 1);
+      updated.ease = clampNumber(Number(updated.ease || 2.5) - 0.05, 1.3, 3.0, 2.5);
+    } else {
+      updated.consecutive_correct = 0;
+      updated.total_wrong = Number(updated.total_wrong || 0) + 1;
+      updated.priority = Number(updated.priority || 1) + 2;
+      updated.lapses = Number(updated.lapses || 0) + 1;
+      updated.difficulty = clampNumber(Number(updated.difficulty || 0.5) + 0.12, 0.1, 0.95, 0.5);
+      updated.stability_days = Math.max(0.5, oldStability * 0.4);
+      updated.learning_phase = "relearning";
+      updated.interval_days = 0;
+      updated.next_review_date = today;
+      updated.ease = clampNumber(Number(updated.ease || 2.5) - 0.15, 1.3, 3.0, 2.5);
+    }
+
+    updated.difficulty = clampNumber(updated.difficulty, 0.1, 0.95, 0.5);
+    updated.stability_days = clampNumber(updated.stability_days, 0.5, maxIntervalDays, 1);
+    updated.retrievability = estimateRetrievability(updated);
+    return updated;
+  }
+
+  function normalizeRecallEffort(effort, verdict) {
+    if (verdict !== "correct") {
+      return verdict === "partial" ? "hard" : "again";
+    }
+    return ["easy", "good", "hard"].includes(effort) ? effort : "good";
+  }
+
+  function applySchedule(result, word, effort = "good") {
     const review = app.progress.reviewStates[word] || normalizeReviewState(findWord(word) || { word });
+
+    if (getSchedulerSettings().schedulerMode === "adaptive") {
+      app.progress.reviewStates[word] = updateMemoryState(review, result, effort);
+      return;
+    }
+
     const today = todayString();
     review.last_seen = today;
+    review.last_reviewed_at = new Date().toISOString();
     review.last_verdict = result.verdict;
+    review.scheduler_version = 2;
+    review.desired_retention = getSchedulerSettings().desiredRetention;
 
     if (result.verdict === "correct") {
       review.consecutive_correct = Number(review.consecutive_correct || 0) + 1;
+      review.initial_correct_count = Number(review.initial_correct_count || 0) + 1;
+      review.last_success_at = review.last_reviewed_at;
       review.interval_days = nextInterval(Number(review.interval_days || 0));
       review.next_review_date = addDays(today, review.interval_days);
       review.priority = Math.max(1, Number(review.priority || 1) - 1);
+      review.learning_phase = review.interval_days >= 21 ? "mature" : "review";
     } else if (result.verdict === "partial") {
       review.consecutive_correct = 0;
       review.interval_days = 1;
       review.total_wrong = Number(review.total_wrong || 0) + 1;
       review.priority = Number(review.priority || 1) + 1;
       review.next_review_date = addDays(today, 1);
+      review.learning_phase = "learning";
     } else {
       review.consecutive_correct = 0;
       review.interval_days = 0;
       review.total_wrong = Number(review.total_wrong || 0) + 1;
       review.priority = Number(review.priority || 1) + 1;
+      review.lapses = Number(review.lapses || 0) + 1;
       review.next_review_date = today;
+      review.learning_phase = "relearning";
     }
 
+    review.stability_days = clampNumber(review.stability_days, 0.5, getMaxIntervalDays(), review.interval_days > 0 ? review.interval_days : 1);
+    review.difficulty = clampNumber(review.difficulty, 0.1, 0.95, 0.5);
+    review.retrievability = estimateRetrievability(review);
     app.progress.reviewStates[word] = review;
   }
 
@@ -797,14 +1595,15 @@
 
   function getDueWords() {
     const today = todayString();
+    const reviewStates = app.progress && app.progress.reviewStates ? app.progress.reviewStates : {};
     return app.words
       .filter((word) => {
-        const review = app.progress.reviewStates[word.word];
+        const review = reviewStates[word.word];
         return !review || String(review.next_review_date || today) <= today;
       })
       .sort((a, b) => {
-        const left = app.progress.reviewStates[a.word] || {};
-        const right = app.progress.reviewStates[b.word] || {};
+        const left = reviewStates[a.word] || {};
+        const right = reviewStates[b.word] || {};
         if (Number(left.priority || 0) !== Number(right.priority || 0)) {
           return Number(right.priority || 0) - Number(left.priority || 0);
         }
@@ -813,6 +1612,443 @@
         }
         return a.word.localeCompare(b.word);
       });
+  }
+
+  function getDecks() {
+    const seedDecks = app.seed && Array.isArray(app.seed.decks) ? app.seed.decks : [];
+    const byId = new Map();
+
+    seedDecks.forEach((deck) => {
+      const deckId = normalizeDeckId(deck.deck_id);
+      if (!deckId) return;
+      byId.set(deckId, {
+        deck_id: deckId,
+        display_name: deck.display_name || deckId,
+        word_count: Number(deck.word_count || 0),
+        source_file: deck.source_file || ""
+      });
+    });
+
+    app.words.forEach((entry) => {
+      getWordDeckIds(entry).forEach((deckId) => {
+        const current = byId.get(deckId) || {
+          deck_id: deckId,
+          display_name: deckId,
+          word_count: 0,
+          source_file: ""
+        };
+        current.word_count = getWordsForDeck(deckId).length;
+        byId.set(deckId, current);
+      });
+    });
+
+    return Array.from(byId.values()).sort((a, b) => naturalDeckCompare(a.deck_id, b.deck_id));
+  }
+
+  function getWordDeckIds(entry) {
+    const values = [];
+    appendDeckValues(values, entry && entry.deck_ids);
+    appendDeckValues(values, entry && entry.deck_tags);
+    appendDeckValues(values, entry && entry.deck_id);
+    appendDeckValues(values, entry && entry.primary_deck_id);
+
+    const seen = new Set();
+    const result = [];
+    values.forEach((value) => {
+      const deckId = normalizeDeckId(value);
+      const key = deckId.toLowerCase();
+      if (!deckId || seen.has(key)) return;
+      seen.add(key);
+      result.push(deckId);
+    });
+    return result.sort(naturalDeckCompare);
+  }
+
+  function appendDeckValues(target, value) {
+    if (Array.isArray(value)) {
+      value.forEach((item) => appendDeckValues(target, item));
+      return;
+    }
+    String(value || "")
+      .split(/[;,]/)
+      .map((item) => item.trim())
+      .filter(Boolean)
+      .forEach((item) => target.push(item));
+  }
+
+  function normalizeDeckId(value) {
+    const text = String(value || "").trim();
+    if (/^d\d+$/i.test(text)) {
+      return `D${Number(text.slice(1))}`;
+    }
+    return text;
+  }
+
+  function normalizeSelectedDeckId(deckId) {
+    const normalized = normalizeDeckId(deckId || "all");
+    if (!normalized || normalized === "all") return "all";
+    const exists = getDecks().some((deck) => deck.deck_id === normalized);
+    return exists ? normalized : "all";
+  }
+
+  function wordBelongsToDeck(entry, deckId) {
+    const normalized = normalizeDeckId(deckId || "all");
+    if (!normalized || normalized === "all") return true;
+    return getWordDeckIds(entry).includes(normalized);
+  }
+
+  function getWordsForDeck(deckId) {
+    const normalized = normalizeDeckId(deckId || "all");
+    if (!normalized || normalized === "all") return app.words.slice();
+    return app.words.filter((entry) => wordBelongsToDeck(entry, normalized));
+  }
+
+  function getDeckLabel(deckId) {
+    const normalized = normalizeDeckId(deckId || "all");
+    if (!normalized || normalized === "all") return "전체 단어";
+    const deck = getDecks().find((item) => item.deck_id === normalized);
+    return deck ? deck.display_name || deck.deck_id : normalized;
+  }
+
+  function naturalDeckCompare(a, b) {
+    const left = deckSortParts(a);
+    const right = deckSortParts(b);
+    if (left.number !== right.number) return left.number - right.number;
+    return left.text.localeCompare(right.text);
+  }
+
+  function deckSortParts(value) {
+    const deckId = normalizeDeckId(value);
+    if (/^D\d+$/.test(deckId)) {
+      return { number: Number(deckId.slice(1)), text: "" };
+    }
+    return { number: Number.MAX_SAFE_INTEGER, text: deckId };
+  }
+
+  function clampDeckQuizCount(value, deckId) {
+    return clampCountForTotal(value, getWordsForDeck(deckId).length);
+  }
+
+  function startDeckQuiz(deckId, options = {}) {
+    const normalized = normalizeDeckId(deckId || "all");
+    const deckWords = getWordsForDeck(normalized);
+    if (deckWords.length === 0) {
+      showToast("선택한 Deck에 단어가 없습니다.");
+      return;
+    }
+
+    const count = clampDeckQuizCount(options.count || app.deckQuizCount, normalized);
+    const quizWords = options.weighted
+      ? sampleWeightedWords(count, { candidates: deckWords })
+      : shuffleWords(deckWords).slice(0, count);
+    app.lastGeneratedQuizWords = quizWords;
+    showToast(`${getDeckLabel(normalized)}에서 ${quizWords.length}개 단어로 퀴즈를 만들었습니다.`);
+    startQuiz(quizWords);
+  }
+
+  function shuffleWords(words) {
+    const shuffled = words.slice();
+    for (let index = shuffled.length - 1; index > 0; index -= 1) {
+      const swapIndex = Math.floor(Math.random() * (index + 1));
+      [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+    }
+    return shuffled;
+  }
+
+  function getWordAttempts(word) {
+    const attempts = app.progress && Array.isArray(app.progress.attempts)
+      ? app.progress.attempts
+      : [];
+    return attempts.filter((attempt) => attempt.word === word);
+  }
+
+  function computeWordStats(entry) {
+    const attempts = getWordAttempts(entry.word);
+    const totalAttempts = attempts.length;
+    const correctCount = attempts.filter((attempt) => attempt.verdict === "correct").length;
+    const partialCount = attempts.filter((attempt) => attempt.verdict === "partial").length;
+    const wrongCount = attempts.filter((attempt) => attempt.verdict === "wrong").length;
+    const blankCount = attempts.filter((attempt) => attempt.verdict === "blank").length;
+    const missCount = partialCount + wrongCount + blankCount;
+    const wrongRate = totalAttempts > 0 ? missCount / totalAttempts : 0;
+    const lastAttemptAt = latestAttemptTimestamp(attempts);
+    const lastMissAt = latestAttemptTimestamp(attempts.filter(isMissAttempt));
+    const reviewState = app.progress && app.progress.reviewStates && app.progress.reviewStates[entry.word]
+      ? normalizeReviewState(entry, app.progress.reviewStates[entry.word], { hasAttempts: totalAttempts > 0 })
+      : normalizeReviewState(entry, null, { hasAttempts: totalAttempts > 0 });
+    const nextReviewDate = reviewState && reviewState.next_review_date ? reviewState.next_review_date : "";
+    const isDue = Boolean(nextReviewDate && String(nextReviewDate) <= todayString());
+    const priority = Number(reviewState && reviewState.priority ? reviewState.priority : 1);
+    const totalWrong = Number(reviewState && reviewState.total_wrong ? reviewState.total_wrong : 0);
+    const consecutiveCorrect = Number(reviewState && reviewState.consecutive_correct ? reviewState.consecutive_correct : 0);
+    const lastSeen = reviewState && reviewState.last_seen ? reviewState.last_seen : lastAttemptAt;
+    const daysSinceLastSeen = daysBetweenToday(lastSeen);
+    const daysSinceLastAttempt = daysBetweenToday(lastAttemptAt);
+    const recentMissScore = scoreRecentMiss(lastMissAt);
+    const staleScore = scoreStaleness(daysSinceLastSeen, totalAttempts);
+    const desiredRetention = getSchedulerSettings().desiredRetention;
+    const retrievability = estimateRetrievability(reviewState);
+    const lastMissDays = daysSinceDate(lastMissAt);
+    const recentMiss = lastMissDays !== null && lastMissDays >= 0 && lastMissDays <= 7;
+    const learningPhase = normalizeLearningPhaseValue(reviewState.learning_phase) || "new";
+    const stabilityDays = clampNumber(reviewState.stability_days, 0.5, getMaxIntervalDays(), 1);
+    const difficulty = clampNumber(reviewState.difficulty, 0.1, 0.95, 0.5);
+    const lapses = Math.max(0, Number(reviewState.lapses || 0));
+    const isRisk = retrievability < desiredRetention || recentMiss || lapses > 0;
+    const stats = {
+      word: entry.word,
+      entry,
+      attempts,
+      totalAttempts,
+      correctCount,
+      partialCount,
+      wrongCount,
+      blankCount,
+      missCount,
+      wrongRate,
+      lastAttemptAt,
+      lastMissAt,
+      reviewState,
+      nextReviewDate,
+      isDue,
+      priority,
+      totalWrong,
+      consecutiveCorrect,
+      daysSinceLastSeen,
+      daysSinceLastAttempt,
+      recentMissScore,
+      staleScore,
+      stabilityDays,
+      difficulty,
+      retrievability,
+      retrievabilityPercent: Math.round(retrievability * 100),
+      desiredRetention,
+      isRisk,
+      learningPhase,
+      lapses,
+      weightedScore: 0
+    };
+    stats.weightedScore = computeWeightedQuizScore(stats);
+    return stats;
+  }
+
+  function computeAllWordStats() {
+    return app.words.map(computeWordStats);
+  }
+
+  function daysBetweenToday(dateValue) {
+    const date = parseLocalDay(dateValue);
+    if (!date) return null;
+
+    const today = parseLocalDay(todayString());
+    const msPerDay = 24 * 60 * 60 * 1000;
+    return Math.floor((today.getTime() - date.getTime()) / msPerDay);
+  }
+
+  function computeWeightedQuizScore(stats) {
+    const wrongRateScore = safeNumber(stats.wrongRate) * 6;
+    const missVolumeScore = Math.min(3, Math.log1p(safeNumber(stats.missCount)));
+    const dueScore = stats.isDue ? 4 : 0;
+    const priorityScore = Math.min(4, safeNumber(stats.priority || 1) * 0.7);
+    const totalWrongScore = Math.min(3, safeNumber(stats.totalWrong) * 0.4);
+    const unseenBoost = stats.totalAttempts === 0 ? 2 : 0;
+    const recentMissScore = Number.isFinite(Number(stats.recentMissScore))
+      ? Number(stats.recentMissScore)
+      : scoreRecentMiss(stats.lastMissAt);
+    const staleScore = Number.isFinite(Number(stats.staleScore))
+      ? Number(stats.staleScore)
+      : scoreStaleness(stats.daysSinceLastSeen, stats.totalAttempts);
+    const lowRetrievabilityScore = Math.max(0, safeNumber(stats.desiredRetention) - safeNumber(stats.retrievability)) * 10;
+    const lapseScore = Math.min(3, safeNumber(stats.lapses) * 0.8);
+    const learningBoost = ["new", "learning", "relearning"].includes(stats.learningPhase) ? 1.5 : 0;
+    const correctPenalty = Math.min(2, safeNumber(stats.consecutiveCorrect) * 0.35);
+    const score = 1
+      + wrongRateScore
+      + missVolumeScore
+      + dueScore
+      + priorityScore
+      + totalWrongScore
+      + unseenBoost
+      + recentMissScore
+      + staleScore
+      + lowRetrievabilityScore
+      + lapseScore
+      + learningBoost
+      - correctPenalty;
+
+    return Math.max(0.2, score);
+  }
+
+  function sampleWeightedWords(count, options = {}) {
+    const sourceWords = Array.isArray(options.candidates)
+      ? options.candidates.slice()
+      : options.deckId && options.deckId !== "all"
+        ? getWordsForDeck(options.deckId)
+        : app.words.slice();
+    const target = clampCountForTotal(count, sourceWords.length);
+    if (target === 0) return [];
+
+    const candidates = sourceWords.map(computeWordStats);
+    const selected = [];
+    while (selected.length < target && candidates.length > 0) {
+      const totalWeight = candidates.reduce((sum, candidate) => {
+        const weight = Number(candidate.weightedScore);
+        return sum + (Number.isFinite(weight) && weight > 0 ? weight : 0);
+      }, 0);
+      let selectedIndex = -1;
+
+      if (totalWeight > 0) {
+        const pick = Math.random() * totalWeight;
+        let cumulative = 0;
+        selectedIndex = candidates.findIndex((candidate) => {
+          const weight = Number(candidate.weightedScore);
+          cumulative += Number.isFinite(weight) && weight > 0 ? weight : 0;
+          return cumulative >= pick;
+        });
+      }
+
+      if (selectedIndex < 0) {
+        selectedIndex = Math.floor(Math.random() * candidates.length);
+      }
+
+      const [candidate] = candidates.splice(selectedIndex, 1);
+      selected.push(candidate.entry);
+    }
+
+    return selected;
+  }
+
+  function clampQuizCount(value) {
+    return clampCountForTotal(value, app.words.length);
+  }
+
+  function clampCountForTotal(value, total) {
+    if (total <= 0) return 0;
+
+    const parsed = Math.floor(Number(value));
+    if (!Number.isFinite(parsed)) {
+      return Math.min(10, total);
+    }
+    return Math.min(total, Math.max(1, parsed));
+  }
+
+  function filterWordStats(statsList, search) {
+    const query = String(search || "").trim().toLowerCase();
+    if (!query) return statsList.slice();
+
+    return statsList.filter((stats) => {
+      const word = String(stats.word || "").toLowerCase();
+      const meaning = String(stats.entry.core_meaning_ko || "").toLowerCase();
+      return word.includes(query) || meaning.includes(query);
+    });
+  }
+
+  function sortWordStats(statsList, sortKey) {
+    const sorted = statsList.slice();
+    sorted.sort((a, b) => {
+      if (sortKey === "wrongRate") {
+        return compareDesc(a.wrongRate, b.wrongRate)
+          || compareDesc(a.missCount, b.missCount)
+          || a.word.localeCompare(b.word);
+      }
+      if (sortKey === "recentMiss") {
+        return compareDesc(timestampSortValue(a.lastMissAt), timestampSortValue(b.lastMissAt))
+          || compareDesc(a.missCount, b.missCount)
+          || a.word.localeCompare(b.word);
+      }
+      if (sortKey === "retrievability") {
+        return compareAsc(a.retrievability, b.retrievability)
+          || compareDesc(a.weightedScore, b.weightedScore)
+          || a.word.localeCompare(b.word);
+      }
+      if (sortKey === "risk") {
+        return compareDesc(a.isRisk ? 1 : 0, b.isRisk ? 1 : 0)
+          || compareAsc(a.retrievability, b.retrievability)
+          || compareDesc(a.lapses, b.lapses)
+          || a.word.localeCompare(b.word);
+      }
+      if (sortKey === "stale") {
+        return compareDesc(staleSortValue(a.daysSinceLastSeen), staleSortValue(b.daysSinceLastSeen))
+          || a.word.localeCompare(b.word);
+      }
+      if (sortKey === "attempts") {
+        return compareDesc(a.totalAttempts, b.totalAttempts)
+          || a.word.localeCompare(b.word);
+      }
+      if (sortKey === "alpha") {
+        return a.word.localeCompare(b.word);
+      }
+      return compareDesc(a.weightedScore, b.weightedScore)
+        || compareDesc(a.missCount, b.missCount)
+        || a.word.localeCompare(b.word);
+    });
+    return sorted;
+  }
+
+  function latestAttemptTimestamp(attempts) {
+    let latest = null;
+    attempts.forEach((attempt) => {
+      const value = timestampSortValue(attempt.timestamp);
+      if (!Number.isFinite(value)) return;
+      if (!latest || value > latest.value) {
+        latest = { value, timestamp: attempt.timestamp };
+      }
+    });
+    return latest ? latest.timestamp : "";
+  }
+
+  function isMissAttempt(attempt) {
+    return attempt.verdict === "partial" || attempt.verdict === "wrong" || attempt.verdict === "blank";
+  }
+
+  function scoreRecentMiss(lastMissAt) {
+    const days = daysBetweenToday(lastMissAt);
+    if (days === null) return 0;
+    if (days <= 1) return 3;
+    if (days <= 3) return 2.5;
+    if (days <= 7) return 2;
+    if (days <= 14) return 1;
+    return 0.4;
+  }
+
+  function scoreStaleness(daysSinceLastSeen, totalAttempts) {
+    if (daysSinceLastSeen === null) return Number(totalAttempts || 0) === 0 ? 1.5 : 0;
+    if (daysSinceLastSeen >= 30) return 2;
+    if (daysSinceLastSeen >= 14) return 1.5;
+    if (daysSinceLastSeen >= 7) return 1;
+    return 0;
+  }
+
+  function safeNumber(value) {
+    const number = Number(value);
+    return Number.isFinite(number) ? number : 0;
+  }
+
+  function compareDesc(left, right) {
+    const leftNumber = Number(left);
+    const rightNumber = Number(right);
+    if (!Number.isFinite(leftNumber) && !Number.isFinite(rightNumber)) return 0;
+    if (!Number.isFinite(leftNumber)) return 1;
+    if (!Number.isFinite(rightNumber)) return -1;
+    return rightNumber - leftNumber;
+  }
+
+  function compareAsc(left, right) {
+    const leftNumber = Number(left);
+    const rightNumber = Number(right);
+    if (!Number.isFinite(leftNumber) && !Number.isFinite(rightNumber)) return 0;
+    if (!Number.isFinite(leftNumber)) return 1;
+    if (!Number.isFinite(rightNumber)) return -1;
+    return leftNumber - rightNumber;
+  }
+
+  function timestampSortValue(value) {
+    const date = parseLocalDay(value, { keepTime: true });
+    return date ? date.getTime() : Number.NEGATIVE_INFINITY;
+  }
+
+  function staleSortValue(value) {
+    return value === null ? Number.POSITIVE_INFINITY : Number(value);
   }
 
   function findWord(word) {
@@ -923,6 +2159,35 @@
     return list;
   }
 
+  function deckWordList(words) {
+    const list = el("div", { className: "list" });
+    words.forEach((word) => {
+      const stats = computeWordStats(word);
+      list.append(
+        el("button", { className: "row", type: "button", onclick: () => navigate("word", { word: word.word }) }, [
+          el("div", { className: "row-main" }, [
+            el("p", { className: "row-title" }, [
+              el("span", {}, word.word),
+              word.entry_type === "phrase" ? el("span", { className: "pill" }, "phrase") : null
+            ]),
+            el("p", { className: "row-subtitle" }, word.core_meaning_ko || word.alt_meanings_ko || ""),
+            deckBadgeRow(word)
+          ]),
+          el("span", { className: "row-meta" }, `시도 ${stats.totalAttempts}`)
+        ])
+      );
+    });
+    return list;
+  }
+
+  function deckBadgeRow(entry) {
+    const deckIds = getWordDeckIds(entry);
+    if (deckIds.length === 0) return null;
+    return el("div", { className: "deck-badge-row" }, deckIds.map((deckId) => (
+      el("span", { className: "deck-badge" }, deckId)
+    )));
+  }
+
   function metric(value, label) {
     return el("div", { className: "metric" }, [
       el("strong", {}, value),
@@ -998,6 +2263,7 @@
 
     app.progress = buildInitialProgress(app.seed);
     app.quiz = null;
+    app.lastQuizSummary = null;
     app.lastResult = null;
     saveProgress();
     showToast("초기화했습니다.");
@@ -1096,6 +2362,7 @@
     const importedProgress = extractProgress(payload);
     app.progress = reconcileProgress(importedProgress, app.seed);
     app.quiz = null;
+    app.lastQuizSummary = null;
     app.answerDraft = "";
     app.lastResult = null;
     saveProgress();
@@ -1160,12 +2427,92 @@
     return dateString(date);
   }
 
+  function parseLocalDay(value, options = {}) {
+    if (!value) return null;
+
+    const text = String(value);
+    const dateOnly = /^(\d{4})-(\d{2})-(\d{2})$/.exec(text);
+    if (dateOnly) {
+      return new Date(Number(dateOnly[1]), Number(dateOnly[2]) - 1, Number(dateOnly[3]));
+    }
+
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) {
+      return null;
+    }
+    if (options.keepTime) {
+      return date;
+    }
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  }
+
   function formatDate(value) {
     const date = new Date(value);
     if (Number.isNaN(date.getTime())) {
       return String(value || "");
     }
     return new Intl.DateTimeFormat("ko-KR", { month: "short", day: "numeric" }).format(date);
+  }
+
+  function formatPercent(value) {
+    const number = Number(value);
+    if (!Number.isFinite(number)) {
+      return "0%";
+    }
+    return `${Math.round(number * 100)}%`;
+  }
+
+  function formatDecimal(value, digits = 1) {
+    const number = Number(value);
+    if (!Number.isFinite(number)) {
+      return (0).toFixed(digits);
+    }
+    return number.toFixed(digits);
+  }
+
+  function formatDays(value) {
+    const number = Number(value);
+    if (!Number.isFinite(number)) {
+      return "0일";
+    }
+    return `${formatDecimal(number, 1)}일`;
+  }
+
+  function normalizeLearningPhaseValue(value) {
+    const phase = String(value || "").trim();
+    return ["new", "learning", "review", "mature", "relearning"].includes(phase) ? phase : "";
+  }
+
+  function formatLearningPhase(value) {
+    const phase = normalizeLearningPhaseValue(value) || "new";
+    const labels = {
+      new: "신규",
+      learning: "학습 중",
+      review: "복습",
+      mature: "장기 유지",
+      relearning: "재학습"
+    };
+    return labels[phase] || labels.new;
+  }
+
+  function formatScore(value) {
+    const number = Number(value);
+    return (Number.isFinite(number) ? number : 0).toFixed(1);
+  }
+
+  function formatDateTimeShort(value) {
+    if (!value) return "없음";
+
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) {
+      return "없음";
+    }
+    return new Intl.DateTimeFormat("ko-KR", {
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
+    }).format(date);
   }
 
   function hashText(value) {

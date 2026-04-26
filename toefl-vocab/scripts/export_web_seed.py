@@ -8,7 +8,7 @@ import hashlib
 import json
 import sys
 import tempfile
-from collections import defaultdict
+from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -29,6 +29,7 @@ SOURCE_FILES = [
     "data/review_queue.csv",
     "data/wrong_answers.jsonl",
     "data/confusion_pairs.csv",
+    "data/decks.csv",
 ]
 REQUIRED_WORD_FIELDS = [
     "word",
@@ -103,6 +104,96 @@ def append_confusion_hints(existing: str, hints: list[str]) -> str:
     return result
 
 
+def split_multi_value(value: Any) -> list[str]:
+    if isinstance(value, list):
+        raw_items = value
+    else:
+        raw_items = str(value or "").replace(",", ";").split(";")
+    return [str(item).strip() for item in raw_items if str(item).strip()]
+
+
+def normalize_deck_id(value: Any) -> str:
+    text = str(value or "").strip()
+    match = text and text.lower().startswith("d") and text[1:].isdigit()
+    if match:
+        return f"D{int(text[1:])}"
+    return text
+
+
+def natural_deck_key(deck_id: str) -> tuple[int, str]:
+    normalized = normalize_deck_id(deck_id)
+    if normalized.startswith("D") and normalized[1:].isdigit():
+        return int(normalized[1:]), ""
+    return sys.maxsize, normalized
+
+
+def unique_sorted_deck_values(values: list[str]) -> list[str]:
+    seen: set[str] = set()
+    result: list[str] = []
+    for value in values:
+        normalized = normalize_deck_id(value)
+        key = normalized.casefold()
+        if not normalized or key in seen:
+            continue
+        seen.add(key)
+        result.append(normalized)
+    return sorted(result, key=natural_deck_key)
+
+
+def deck_ids_from_row(row: dict[str, str]) -> list[str]:
+    values: list[str] = []
+    for field in ["deck_ids", "deck_tags", "deck_id", "primary_deck_id"]:
+        values.extend(split_multi_value(row.get(field, "")))
+    return unique_sorted_deck_values(values)
+
+
+def source_files_from_row(row: dict[str, str]) -> list[str]:
+    return split_multi_value(row.get("source_files", ""))
+
+
+def as_int(value: Any, default: int = 0) -> int:
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return default
+
+
+def build_decks(words: list[dict[str, Any]], deck_rows: list[dict[str, str]]) -> list[dict[str, Any]]:
+    counts: Counter[str] = Counter()
+    sources_by_deck: dict[str, Counter[str]] = defaultdict(Counter)
+    metadata_by_deck: dict[str, dict[str, str]] = {}
+
+    for row in deck_rows:
+        deck_id = normalize_deck_id(row.get("deck_id", ""))
+        if deck_id:
+            metadata_by_deck[deck_id] = row
+
+    for entry in words:
+        source_files = [source for source in entry.get("source_files", []) if str(source).startswith("decks/")]
+        for deck_id in entry.get("deck_ids", []):
+            counts[deck_id] += 1
+            for source_file in source_files:
+                sources_by_deck[deck_id][source_file] += 1
+
+    deck_ids = set(metadata_by_deck) | set(counts)
+    decks: list[dict[str, Any]] = []
+    for deck_id in sorted(deck_ids, key=natural_deck_key):
+        metadata = metadata_by_deck.get(deck_id, {})
+        source_file = str(metadata.get("source_file") or "").strip()
+        if not source_file and sources_by_deck.get(deck_id):
+            source_file = sources_by_deck[deck_id].most_common(1)[0][0]
+        word_count = counts.get(deck_id) or as_int(metadata.get("word_count"), 0)
+        decks.append(
+            {
+                "deck_id": deck_id,
+                "display_name": metadata.get("display_name") or deck_id,
+                "word_count": word_count,
+                "source_file": source_file,
+            }
+        )
+    return decks
+
+
 def build_payload(root: Path) -> tuple[dict[str, Any], dict[str, int]]:
     data_dir = root / "data"
     master_path = data_dir / "master_words.csv"
@@ -114,6 +205,7 @@ def build_payload(root: Path) -> tuple[dict[str, Any], dict[str, int]]:
     review_rows = read_csv_rows(data_dir / "review_queue.csv")
     wrong_rows = read_jsonl(data_dir / "wrong_answers.jsonl")
     confusion_rows = read_csv_rows(data_dir / "confusion_pairs.csv")
+    deck_rows = read_csv_rows(data_dir / "decks.csv")
 
     reviews_by_word = {
         normalize_word_key(row.get("word", "")): normalize_review_state(row)
@@ -153,6 +245,14 @@ def build_payload(root: Path) -> tuple[dict[str, Any], dict[str, int]]:
         if not entry["entry_type"]:
             entry["entry_type"] = "word"
 
+        deck_ids = deck_ids_from_row(row)
+        deck_tags = unique_sorted_deck_values(split_multi_value(row.get("deck_tags", "")) or deck_ids)
+        primary_deck_id = normalize_deck_id(row.get("primary_deck_id", "")) or (deck_ids[0] if deck_ids else "")
+        entry["deck_ids"] = deck_ids
+        entry["deck_tags"] = deck_tags
+        entry["primary_deck_id"] = primary_deck_id
+        entry["source_files"] = source_files_from_row(row)
+
         hints = confusion_hints_by_word.get(word_key, [])
         entry["common_confusions_ko"] = append_confusion_hints(entry.get("common_confusions_ko", ""), hints)
 
@@ -166,17 +266,21 @@ def build_payload(root: Path) -> tuple[dict[str, Any], dict[str, int]]:
         entry["wrong_attempts"] = attempts
         words.append(entry)
 
+    decks = build_decks(words, deck_rows)
+
     payload = {
         "schema_version": 1,
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "source_hash": compute_source_hash(root),
         "source_files": SOURCE_FILES,
+        "decks": decks,
         "words": words,
         "confusion_pairs": confusion_pairs,
     }
 
     stats = {
         "words": len(words),
+        "decks": len(decks),
         "review_states": review_state_count,
         "wrong_attempts": wrong_attempt_count,
     }
@@ -222,6 +326,9 @@ def main() -> None:
     atomic_write_json(output, payload)
 
     print(f"Exported words: {stats['words']}")
+    print(f"Exported decks: {stats['decks']}")
+    for deck in payload.get("decks", []):
+        print(f"- {deck['deck_id']}: {deck['word_count']} words")
     print(f"Review states merged: {stats['review_states']}")
     print(f"Wrong attempts merged: {stats['wrong_attempts']}")
     print(f"Output: {output}")

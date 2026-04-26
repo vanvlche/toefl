@@ -1,20 +1,24 @@
 # 오늘 채점 리포트
 
 - 날짜: 2026-04-25
-- 세션: `2026-04-25_test_01`
-- 채점 요약: 총 30문항에서 `correct 20`, `partial 7`, `wrong 0`, `blank 3`
-- 메모: 첫 줄의 `2026-04-25_test_01`는 세션 식별자로 보고 채점 대상에서 제외했다.
-- 데이터 메모: `broadly`, `whereby`, `liberate`는 세션 신규 단어로 `master_words.csv`와 `review_queue.csv`에 추가했다.
+- 최근 세션: `2026-04-25_test_02`
+- 최근 채점 요약: 총 10문항에서 `correct 3`, `partial 1`, `wrong 3`, `blank 3`
+- 오늘 누적 요약: 총 40문항에서 `correct 23`, `partial 8`, `wrong 3`, `blank 6`
+- 메모: 첫 줄의 `2026-04-25_test_02`는 세션 식별자로 보고 채점 대상에서 제외했다.
+- 데이터 메모: `tremendous`, `cope with`, `inducement`, `comprise`, `allegiance`, `idiosyncrasy`, `minute`, `markedly`, `disseminate`, `detrimental`은 세션 신규 단어로 `master_words.csv`와 `review_queue.csv`에 추가했다.
 
 ## 주요 약점
-- 공란 응답이 남아 있다: `peril`, `arduous`, `insolent`
-- 뉘앙스가 약하거나 지나치게 넓은 답이 있다: `palatial`, `intricate`, `eclectic`, `turmoil`, `crude`, `materialize`, `profuse`
-- 반복 취약 단어: `intricate`, `eclectic`, `peril`, `arduous`, `palatial`, `turmoil`, `crude`, `insolent`
+- 공란 응답: `cope with`, `disseminate`, `detrimental`
+- 의미 혼동: `inducement`, `allegiance`, `markedly`
+- 뉘앙스가 약하거나 지나치게 넓은 답: `idiosyncrasy`
+- 오늘 반복 취약 흐름: 공란과 형태가 비슷한 단어 혼동이 점수 손실의 중심이다.
 
 ## 내일 우선 복습
-- `palatial`, `intricate`, `eclectic`, `turmoil`, `crude`, `peril`, `arduous`, `materialize`, `profuse`, `insolent`
+- `cope with`, `disseminate`, `detrimental`
+- `inducement`, `allegiance`, `markedly`
+- `idiosyncrasy`
 
 ## 간단 코멘트
-- 전날 blank였던 `recompense`, `deem`, `demolish`는 이번에 정답으로 회복했다.
-- `constituent`도 이번에는 `구성요소`로 정확히 답했다.
-- `wrong` 판정은 없고, 주요 손실은 공란과 뉘앙스 부족에서 발생했다.
+- `tremendous`, `comprise`, `minute`는 정답 처리했다.
+- `inducment`는 `inducement` 오탈자로 정규화했다.
+- `allegiance`는 `alliance/ally`와 분리해서 기억해야 한다.

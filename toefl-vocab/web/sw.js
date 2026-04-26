@@ -1,4 +1,4 @@
-const CACHE_NAME = "toefl-vocab-pwa-v2";
+const CACHE_NAME = "toefl-vocab-pwa-v5";
 const APP_SHELL = [
   "./",
   "./index.html",

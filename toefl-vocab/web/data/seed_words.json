@@ -1,12 +1,21 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-04-25T03:47:47.003491+00:00",
-  "source_hash": "a11a755b8bd51e7051934ed05572d8b6810aee42af02808bf3e4949feecf8a17",
+  "generated_at": "2026-04-26T01:04:28.591126+00:00",
+  "source_hash": "6bcb73a507d7f902809e265bc1971a948bf1d53f8231df23312066309545efc7",
   "source_files": [
     "data/master_words.csv",
     "data/review_queue.csv",
     "data/wrong_answers.jsonl",
-    "data/confusion_pairs.csv"
+    "data/confusion_pairs.csv",
+    "data/decks.csv"
+  ],
+  "decks": [
+    {
+      "deck_id": "D8",
+      "display_name": "D8",
+      "word_count": 27,
+      "source_file": "decks/D8_voca.txt"
+    }
   ],
   "words": [
     {
@@ -20,12 +29,14 @@
       "status": "active",
       "notes": "starter_seed",
       "entry_type": "word",
-      "deck_tags": "",
-      "source_files": "",
+      "deck_tags": [],
+      "source_files": [],
       "accepted_paraphrases_ko": "간신히; 가까스로; 겨우; 거의 ~않다; 거의 ~하지 못하다",
       "grading_notes": "full credit은 간신히/겨우/거의 ~않다의 부정-최소량 뉘앙스를 보여야 함; 단순히 거의 하지 않는은 문맥에 따라 partial",
       "common_confusions_ko": "hardly/scarcely 계열; barely와 rarely 혼동; 거의 안 한다만 쓰면 간신히 생존했다의 의미가 약함",
       "evidence_hint": "core_meaning_ko=간신히; alt_meanings_ko=거의 ~아니게/겨우; example_en=The plant barely survived the winter.",
+      "deck_ids": [],
+      "primary_deck_id": "",
       "review_state": {
         "word": "barely",
         "next_review_date": "2026-04-25",
@@ -71,12 +82,14 @@
       "status": "active",
       "notes": "starter_seed",
       "entry_type": "word",
-      "deck_tags": "",
-      "source_files": "",
+      "deck_tags": [],
+      "source_files": [],
       "accepted_paraphrases_ko": "",
       "grading_notes": "",
       "common_confusions_ko": "",
       "evidence_hint": "",
+      "deck_ids": [],
+      "primary_deck_id": "",
       "review_state": {
         "word": "strew",
         "next_review_date": "2026-04-27",
@@ -102,12 +115,14 @@
       "status": "active",
       "notes": "starter_seed",
       "entry_type": "word",
-      "deck_tags": "",
-      "source_files": "",
+      "deck_tags": [],
+      "source_files": [],
       "accepted_paraphrases_ko": "",
       "grading_notes": "",
       "common_confusions_ko": "",
       "evidence_hint": "",
+      "deck_ids": [],
+      "primary_deck_id": "",
       "review_state": {
         "word": "encapsulate",
         "next_review_date": "2026-04-27",
@@ -133,12 +148,14 @@
       "status": "active",
       "notes": "starter_seed",
       "entry_type": "word",
-      "deck_tags": "",
-      "source_files": "",
+      "deck_tags": [],
+      "source_files": [],
       "accepted_paraphrases_ko": "다루기 힘든; 거추장스러운; 조작하기 불편한; 감당하기 어려운",
       "grading_notes": "크기/무게/복잡성 때문에 다루기 어렵다는 뜻이면 correct; 단순히 무거운은 too narrow partial",
       "common_confusions_ko": "heavy=무거운으로만 답하면 범위가 좁음; awkward는 문맥상 가능하지만 어색한만 쓰면 불충분; unwieldly는 철자 오류",
       "evidence_hint": "core_meaning_ko=다루기 힘든; alt_meanings_ko=거추장스러운/조작하기 불편한; example_en=The box was too unwieldy to carry alone.",
+      "deck_ids": [],
+      "primary_deck_id": "",
       "review_state": {
         "word": "unwieldy",
         "next_review_date": "2026-04-27",
@@ -164,12 +181,14 @@
       "status": "active",
       "notes": "starter_seed",
       "entry_type": "word",
-      "deck_tags": "",
-      "source_files": "",
+      "deck_tags": [],
+      "source_files": [],
       "accepted_paraphrases_ko": "",
       "grading_notes": "",
       "common_confusions_ko": "",
       "evidence_hint": "",
+      "deck_ids": [],
+      "primary_deck_id": "",
       "review_state": {
         "word": "subsequent",
         "next_review_date": "2026-04-27",
@@ -195,12 +214,14 @@
       "status": "active",
       "notes": "starter_seed",
       "entry_type": "word",
-      "deck_tags": "",
-      "source_files": "",
+      "deck_tags": [],
+      "source_files": [],
       "accepted_paraphrases_ko": "두드러진; 눈에 띄는; 현저한; 인상적인",
       "grading_notes": "noticeable/prominent 의미가 핵심; 극심한/격렬한처럼 강도만 말하면 nuance_mismatch",
       "common_confusions_ko": "극심한; 강렬한; 때리는; 파업 중인과 혼동",
       "evidence_hint": "core_meaning_ko=두드러진; alt_meanings_ko=눈에 띄는/인상적인; example_en=There is a striking difference between the two groups.",
+      "deck_ids": [],
+      "primary_deck_id": "",
       "review_state": {
         "word": "striking",
         "next_review_date": "2026-04-25",
@@ -245,12 +266,14 @@
       "status": "active",
       "notes": "starter_seed",
       "entry_type": "word",
-      "deck_tags": "",
-      "source_files": "",
+      "deck_tags": [],
+      "source_files": [],
       "accepted_paraphrases_ko": "",
       "grading_notes": "",
       "common_confusions_ko": "",
       "evidence_hint": "",
+      "deck_ids": [],
+      "primary_deck_id": "",
       "review_state": {
         "word": "rigid",
         "next_review_date": "2026-04-27",
@@ -276,12 +299,14 @@
       "status": "active",
       "notes": "polysemous_seed",
       "entry_type": "word",
-      "deck_tags": "",
-      "source_files": "",
+      "deck_tags": [],
+      "source_files": [],
       "accepted_paraphrases_ko": "정하다; 놓다; 고정하다; 굳은; 한 벌; 집합; 설정하다",
       "grading_notes": "다의어라 example_en의 set a clear goal에서는 정하다/설정하다가 주 sense; 세트/집합만 쓰면 해당 문맥에서는 polysemy_gap",
       "common_confusions_ko": "세트; 집합; 해가 지다; 굳다 중 문맥 없는 단일 답은 불충분할 수 있음",
       "evidence_hint": "pos=v/adj/n; core_meaning_ko=놓다/정하다; alt_meanings_ko=고정하다/굳은/한 벌/집합; example_en=We need to set a clear goal.",
+      "deck_ids": [],
+      "primary_deck_id": "",
       "review_state": {
         "word": "set",
         "next_review_date": "2026-04-27",
@@ -307,12 +332,14 @@
       "status": "active",
       "notes": "starter_seed",
       "entry_type": "word",
-      "deck_tags": "",
-      "source_files": "",
+      "deck_tags": [],
+      "source_files": [],
       "accepted_paraphrases_ko": "",
       "grading_notes": "",
       "common_confusions_ko": "",
       "evidence_hint": "",
+      "deck_ids": [],
+      "primary_deck_id": "",
       "review_state": {
         "word": "exude",
         "next_review_date": "2026-04-25",
@@ -357,12 +384,14 @@
       "status": "active",
       "notes": "starter_seed",
       "entry_type": "word",
-      "deck_tags": "",
-      "source_files": "",
+      "deck_tags": [],
+      "source_files": [],
       "accepted_paraphrases_ko": "",
       "grading_notes": "",
       "common_confusions_ko": "",
       "evidence_hint": "",
+      "deck_ids": [],
+      "primary_deck_id": "",
       "review_state": {
         "word": "precede",
         "next_review_date": "2026-04-27",
@@ -388,12 +417,14 @@
       "status": "active",
       "notes": "polysemous_seed",
       "entry_type": "word",
-      "deck_tags": "",
-      "source_files": "",
+      "deck_tags": [],
+      "source_files": [],
       "accepted_paraphrases_ko": "기사; 논문; 관사; 조항; 물품",
       "grading_notes": "example_en의 read an article about는 기사/논문 sense; 물품/관사/조항만 답하면 문맥에 따라 polysemy_gap",
       "common_confusions_ko": "물건; 관사; 조항만 단독 답; artifact와 혼동",
       "evidence_hint": "pos=n; core_meaning_ko=기사/물품; alt_meanings_ko=관사/조항/논문; example_en=I read an article about climate policy.",
+      "deck_ids": [],
+      "primary_deck_id": "",
       "review_state": {
         "word": "article",
         "next_review_date": "2026-04-27",
@@ -419,12 +450,14 @@
       "status": "active",
       "notes": "starter_seed",
       "entry_type": "word",
-      "deck_tags": "",
-      "source_files": "",
+      "deck_tags": [],
+      "source_files": [],
       "accepted_paraphrases_ko": "",
       "grading_notes": "",
       "common_confusions_ko": "",
       "evidence_hint": "",
+      "deck_ids": [],
+      "primary_deck_id": "",
       "review_state": {
         "word": "rudiments",
         "next_review_date": "2026-04-25",
@@ -469,12 +502,14 @@
       "status": "active",
       "notes": "starter_seed",
       "entry_type": "word",
-      "deck_tags": "",
-      "source_files": "",
+      "deck_tags": [],
+      "source_files": [],
       "accepted_paraphrases_ko": "사망률; 죽음; 필멸성; 사망",
       "grading_notes": "통계/infant mortality 문맥은 사망률이 주 sense; 죽음/사망만 쓰면 문맥상 partial일 수 있음",
       "common_confusions_ko": "morality=도덕성과 혼동; fatality=사망자/사망 사건과 혼동",
       "evidence_hint": "core_meaning_ko=사망률/죽음; alt_meanings_ko=필멸성; example_en=The report tracked infant mortality over time.",
+      "deck_ids": [],
+      "primary_deck_id": "",
       "review_state": {
         "word": "mortality",
         "next_review_date": "2026-04-27",
@@ -500,12 +535,14 @@
       "status": "active",
       "notes": "starter_seed",
       "entry_type": "word",
-      "deck_tags": "",
-      "source_files": "",
+      "deck_tags": [],
+      "source_files": [],
       "accepted_paraphrases_ko": "제약하다; 제한하다; 억누르다; 속박하다; 구속하다",
       "grading_notes": "limit/restrict 의미가 핵심; 강요하다는 compel/force 쪽이라 wrong",
       "common_confusions_ko": "compel/force=강요하다와 혼동; restrain과 유사하지만 물리적 억제만으로 좁히면 partial",
       "evidence_hint": "core_meaning_ko=제약하다; alt_meanings_ko=억누르다/제한하다; example_en=Limited funding constrained the project.",
+      "deck_ids": [],
+      "primary_deck_id": "",
       "review_state": {
         "word": "constrain",
         "next_review_date": "2026-04-25",
@@ -550,12 +587,14 @@
       "status": "active",
       "notes": "polysemous_seed",
       "entry_type": "word",
-      "deck_tags": "",
-      "source_files": "",
+      "deck_tags": [],
+      "source_files": [],
       "accepted_paraphrases_ko": "주제; 대상; 과목; 피험자; ~을 겪게 하다; 복종시키다",
       "grading_notes": "example_en의 subject는 주제/화제 sense; subject to 구조는 겪게 하다/따르게 하다 sense; 주어만 쓰면 문맥상 불충분",
       "common_confusions_ko": "주어; 국민/신하; 과목만 단독 답하면 polysemy_gap 가능",
       "evidence_hint": "pos=n/v; core_meaning_ko=주제/대상; alt_meanings_ko=과목/~을 겪게 하다/복종시키다; example_en=The topic was too sensitive to raise as a subject.",
+      "deck_ids": [],
+      "primary_deck_id": "",
       "review_state": {
         "word": "subject",
         "next_review_date": "2026-04-27",
@@ -581,12 +620,20 @@
       "status": "active",
       "notes": "starter_seed",
       "entry_type": "word",
-      "deck_tags": "D8",
-      "source_files": "decks/D8_voca.txt",
+      "deck_tags": [
+        "D8"
+      ],
+      "source_files": [
+        "decks/D8_voca.txt"
+      ],
       "accepted_paraphrases_ko": "절충적인; 여러 요소를 취한; 다양한 데서 골라 모은; 취향이 폭넓은",
       "grading_notes": "여러 출처/양식에서 골라 조합한다는 의미가 있어야 full credit; 다방면의만 쓰면 too broad partial",
       "common_confusions_ko": "단명하는=ephemeral과 혼동; 전기적=electric과 형태 혼동; 그냥 다양한은 불충분할 수 있음",
       "evidence_hint": "core_meaning_ko=절충적인; alt_meanings_ko=여러 요소를 취한/취향이 폭넓은; example_en=Her playlist is eclectic and hard to predict.",
+      "deck_ids": [
+        "D8"
+      ],
+      "primary_deck_id": "D8",
       "review_state": {
         "word": "eclectic",
         "next_review_date": "2026-04-26",
@@ -673,12 +720,20 @@
       "status": "active",
       "notes": "starter_seed",
       "entry_type": "word",
-      "deck_tags": "D8",
-      "source_files": "decks/D8_voca.txt",
+      "deck_tags": [
+        "D8"
+      ],
+      "source_files": [
+        "decks/D8_voca.txt"
+      ],
       "accepted_paraphrases_ko": "",
       "grading_notes": "",
       "common_confusions_ko": "",
       "evidence_hint": "",
+      "deck_ids": [
+        "D8"
+      ],
+      "primary_deck_id": "D8",
       "review_state": {
         "word": "intricate",
         "next_review_date": "2026-04-26",
@@ -763,12 +818,20 @@
       "status": "active",
       "notes": "starter_seed",
       "entry_type": "word",
-      "deck_tags": "D8",
-      "source_files": "decks/D8_voca.txt",
+      "deck_tags": [
+        "D8"
+      ],
+      "source_files": [
+        "decks/D8_voca.txt"
+      ],
       "accepted_paraphrases_ko": "",
       "grading_notes": "",
       "common_confusions_ko": "",
       "evidence_hint": "",
+      "deck_ids": [
+        "D8"
+      ],
+      "primary_deck_id": "D8",
       "review_state": {
         "word": "potent",
         "next_review_date": "2026-05-09",
@@ -794,12 +857,20 @@
       "status": "active",
       "notes": "starter_seed",
       "entry_type": "word",
-      "deck_tags": "D8",
-      "source_files": "decks/D8_voca.txt",
+      "deck_tags": [
+        "D8"
+      ],
+      "source_files": [
+        "decks/D8_voca.txt"
+      ],
       "accepted_paraphrases_ko": "",
       "grading_notes": "",
       "common_confusions_ko": "",
       "evidence_hint": "",
+      "deck_ids": [
+        "D8"
+      ],
+      "primary_deck_id": "D8",
       "review_state": {
         "word": "peril",
         "next_review_date": "2026-04-26",
@@ -884,12 +955,20 @@
       "status": "active",
       "notes": "deck_import",
       "entry_type": "word",
-      "deck_tags": "D8",
-      "source_files": "decks/D8_voca.txt",
+      "deck_tags": [
+        "D8"
+      ],
+      "source_files": [
+        "decks/D8_voca.txt"
+      ],
       "accepted_paraphrases_ko": "",
       "grading_notes": "",
       "common_confusions_ko": "",
       "evidence_hint": "",
+      "deck_ids": [
+        "D8"
+      ],
+      "primary_deck_id": "D8",
       "review_state": {
         "word": "palatial",
         "next_review_date": "2026-04-26",
@@ -958,12 +1037,20 @@
       "status": "active",
       "notes": "deck_import",
       "entry_type": "word",
-      "deck_tags": "D8",
-      "source_files": "decks/D8_voca.txt",
+      "deck_tags": [
+        "D8"
+      ],
+      "source_files": [
+        "decks/D8_voca.txt"
+      ],
       "accepted_paraphrases_ko": "",
       "grading_notes": "",
       "common_confusions_ko": "",
       "evidence_hint": "",
+      "deck_ids": [
+        "D8"
+      ],
+      "primary_deck_id": "D8",
       "review_state": {
         "word": "turmoil",
         "next_review_date": "2026-04-26",
@@ -1030,12 +1117,20 @@
       "status": "active",
       "notes": "deck_import",
       "entry_type": "word",
-      "deck_tags": "D8",
-      "source_files": "decks/D8_voca.txt",
+      "deck_tags": [
+        "D8"
+      ],
+      "source_files": [
+        "decks/D8_voca.txt"
+      ],
       "accepted_paraphrases_ko": "",
       "grading_notes": "",
       "common_confusions_ko": "",
       "evidence_hint": "",
+      "deck_ids": [
+        "D8"
+      ],
+      "primary_deck_id": "D8",
       "review_state": {
         "word": "preeminent",
         "next_review_date": "2026-05-02",
@@ -1061,12 +1156,20 @@
       "status": "active",
       "notes": "deck_import; ambiguity=명사 뜻도 자주 쓰임",
       "entry_type": "word",
-      "deck_tags": "D8",
-      "source_files": "decks/D8_voca.txt",
+      "deck_tags": [
+        "D8"
+      ],
+      "source_files": [
+        "decks/D8_voca.txt"
+      ],
       "accepted_paraphrases_ko": "",
       "grading_notes": "",
       "common_confusions_ko": "",
       "evidence_hint": "",
+      "deck_ids": [
+        "D8"
+      ],
+      "primary_deck_id": "D8",
       "review_state": {
         "word": "recompense",
         "next_review_date": "2026-04-28",
@@ -1111,12 +1214,20 @@
       "status": "active",
       "notes": "deck_import; ambiguity=문맥에 따라 원유 뜻도 있음",
       "entry_type": "word",
-      "deck_tags": "D8",
-      "source_files": "decks/D8_voca.txt",
+      "deck_tags": [
+        "D8"
+      ],
+      "source_files": [
+        "decks/D8_voca.txt"
+      ],
       "accepted_paraphrases_ko": "",
       "grading_notes": "",
       "common_confusions_ko": "",
       "evidence_hint": "",
+      "deck_ids": [
+        "D8"
+      ],
+      "primary_deck_id": "D8",
       "review_state": {
         "word": "crude",
         "next_review_date": "2026-04-26",
@@ -1185,12 +1296,20 @@
       "status": "active",
       "notes": "deck_import",
       "entry_type": "word",
-      "deck_tags": "D8",
-      "source_files": "decks/D8_voca.txt",
+      "deck_tags": [
+        "D8"
+      ],
+      "source_files": [
+        "decks/D8_voca.txt"
+      ],
       "accepted_paraphrases_ko": "",
       "grading_notes": "",
       "common_confusions_ko": "",
       "evidence_hint": "",
+      "deck_ids": [
+        "D8"
+      ],
+      "primary_deck_id": "D8",
       "review_state": {
         "word": "proliferate",
         "next_review_date": "2026-05-02",
@@ -1216,12 +1335,20 @@
       "status": "active",
       "notes": "deck_import",
       "entry_type": "word",
-      "deck_tags": "D8",
-      "source_files": "decks/D8_voca.txt",
+      "deck_tags": [
+        "D8"
+      ],
+      "source_files": [
+        "decks/D8_voca.txt"
+      ],
       "accepted_paraphrases_ko": "",
       "grading_notes": "",
       "common_confusions_ko": "",
       "evidence_hint": "",
+      "deck_ids": [
+        "D8"
+      ],
+      "primary_deck_id": "D8",
       "review_state": {
         "word": "assess",
         "next_review_date": "2026-05-02",
@@ -1247,12 +1374,20 @@
       "status": "active",
       "notes": "deck_import",
       "entry_type": "word",
-      "deck_tags": "D8",
-      "source_files": "decks/D8_voca.txt",
+      "deck_tags": [
+        "D8"
+      ],
+      "source_files": [
+        "decks/D8_voca.txt"
+      ],
       "accepted_paraphrases_ko": "",
       "grading_notes": "",
       "common_confusions_ko": "",
       "evidence_hint": "",
+      "deck_ids": [
+        "D8"
+      ],
+      "primary_deck_id": "D8",
       "review_state": {
         "word": "scrutiny",
         "next_review_date": "2026-05-02",
@@ -1278,12 +1413,20 @@
       "status": "active",
       "notes": "deck_import; ambiguity=예리한 뜻도 빈출",
       "entry_type": "word",
-      "deck_tags": "D8",
-      "source_files": "decks/D8_voca.txt",
+      "deck_tags": [
+        "D8"
+      ],
+      "source_files": [
+        "decks/D8_voca.txt"
+      ],
       "accepted_paraphrases_ko": "",
       "grading_notes": "",
       "common_confusions_ko": "",
       "evidence_hint": "",
+      "deck_ids": [
+        "D8"
+      ],
+      "primary_deck_id": "D8",
       "review_state": {
         "word": "acute",
         "next_review_date": "2026-05-02",
@@ -1309,12 +1452,20 @@
       "status": "active",
       "notes": "deck_import",
       "entry_type": "word",
-      "deck_tags": "D8",
-      "source_files": "decks/D8_voca.txt",
+      "deck_tags": [
+        "D8"
+      ],
+      "source_files": [
+        "decks/D8_voca.txt"
+      ],
       "accepted_paraphrases_ko": "",
       "grading_notes": "",
       "common_confusions_ko": "",
       "evidence_hint": "",
+      "deck_ids": [
+        "D8"
+      ],
+      "primary_deck_id": "D8",
       "review_state": {
         "word": "inadvertently",
         "next_review_date": "2026-04-28",
@@ -1359,12 +1510,20 @@
       "status": "active",
       "notes": "deck_import; raw_duplicate_deduped",
       "entry_type": "word",
-      "deck_tags": "D8",
-      "source_files": "decks/D8_voca.txt",
+      "deck_tags": [
+        "D8"
+      ],
+      "source_files": [
+        "decks/D8_voca.txt"
+      ],
       "accepted_paraphrases_ko": "",
       "grading_notes": "",
       "common_confusions_ko": "",
       "evidence_hint": "",
+      "deck_ids": [
+        "D8"
+      ],
+      "primary_deck_id": "D8",
       "review_state": {
         "word": "arduous",
         "next_review_date": "2026-04-26",
@@ -1449,12 +1608,20 @@
       "status": "active",
       "notes": "deck_import; ambiguity=나타나다 뜻도 자주 쓰임",
       "entry_type": "word",
-      "deck_tags": "D8",
-      "source_files": "decks/D8_voca.txt",
+      "deck_tags": [
+        "D8"
+      ],
+      "source_files": [
+        "decks/D8_voca.txt"
+      ],
       "accepted_paraphrases_ko": "",
       "grading_notes": "",
       "common_confusions_ko": "",
       "evidence_hint": "",
+      "deck_ids": [
+        "D8"
+      ],
+      "primary_deck_id": "D8",
       "review_state": {
         "word": "materialize",
         "next_review_date": "2026-04-26",
@@ -1504,12 +1671,20 @@
       "status": "active",
       "notes": "deck_import; ambiguity=제도나 조직의 종말에도 쓰임",
       "entry_type": "word",
-      "deck_tags": "D8",
-      "source_files": "decks/D8_voca.txt",
+      "deck_tags": [
+        "D8"
+      ],
+      "source_files": [
+        "decks/D8_voca.txt"
+      ],
       "accepted_paraphrases_ko": "",
       "grading_notes": "",
       "common_confusions_ko": "",
       "evidence_hint": "",
+      "deck_ids": [
+        "D8"
+      ],
+      "primary_deck_id": "D8",
       "review_state": {
         "word": "demise",
         "next_review_date": "2026-05-02",
@@ -1535,12 +1710,20 @@
       "status": "active",
       "notes": "deck_import",
       "entry_type": "word",
-      "deck_tags": "D8",
-      "source_files": "decks/D8_voca.txt",
+      "deck_tags": [
+        "D8"
+      ],
+      "source_files": [
+        "decks/D8_voca.txt"
+      ],
       "accepted_paraphrases_ko": "",
       "grading_notes": "",
       "common_confusions_ko": "",
       "evidence_hint": "",
+      "deck_ids": [
+        "D8"
+      ],
+      "primary_deck_id": "D8",
       "review_state": {
         "word": "deem",
         "next_review_date": "2026-04-28",
@@ -1585,12 +1768,20 @@
       "status": "active",
       "notes": "deck_import; ambiguity=문맥에 따라 과다함 강조",
       "entry_type": "word",
-      "deck_tags": "D8",
-      "source_files": "decks/D8_voca.txt",
+      "deck_tags": [
+        "D8"
+      ],
+      "source_files": [
+        "decks/D8_voca.txt"
+      ],
       "accepted_paraphrases_ko": "",
       "grading_notes": "",
       "common_confusions_ko": "",
       "evidence_hint": "",
+      "deck_ids": [
+        "D8"
+      ],
+      "primary_deck_id": "D8",
       "review_state": {
         "word": "profuse",
         "next_review_date": "2026-04-26",
@@ -1657,12 +1848,20 @@
       "status": "active",
       "notes": "deck_import; ambiguity=동사 용법도 있음",
       "entry_type": "word",
-      "deck_tags": "D8",
-      "source_files": "decks/D8_voca.txt",
+      "deck_tags": [
+        "D8"
+      ],
+      "source_files": [
+        "decks/D8_voca.txt"
+      ],
       "accepted_paraphrases_ko": "",
       "grading_notes": "",
       "common_confusions_ko": "",
       "evidence_hint": "",
+      "deck_ids": [
+        "D8"
+      ],
+      "primary_deck_id": "D8",
       "review_state": {
         "word": "ornament",
         "next_review_date": "2026-05-02",
@@ -1688,12 +1887,20 @@
       "status": "active",
       "notes": "deck_import",
       "entry_type": "word",
-      "deck_tags": "D8",
-      "source_files": "decks/D8_voca.txt",
+      "deck_tags": [
+        "D8"
+      ],
+      "source_files": [
+        "decks/D8_voca.txt"
+      ],
       "accepted_paraphrases_ko": "",
       "grading_notes": "",
       "common_confusions_ko": "",
       "evidence_hint": "",
+      "deck_ids": [
+        "D8"
+      ],
+      "primary_deck_id": "D8",
       "review_state": {
         "word": "demolish",
         "next_review_date": "2026-04-28",
@@ -1738,12 +1945,20 @@
       "status": "active",
       "notes": "deck_import; ambiguity=확장 용법으로 열렬함도 나타냄",
       "entry_type": "word",
-      "deck_tags": "D8",
-      "source_files": "decks/D8_voca.txt",
+      "deck_tags": [
+        "D8"
+      ],
+      "source_files": [
+        "decks/D8_voca.txt"
+      ],
       "accepted_paraphrases_ko": "",
       "grading_notes": "",
       "common_confusions_ko": "",
       "evidence_hint": "",
+      "deck_ids": [
+        "D8"
+      ],
+      "primary_deck_id": "D8",
       "review_state": {
         "word": "voracious",
         "next_review_date": "2026-05-02",
@@ -1769,12 +1984,20 @@
       "status": "active",
       "notes": "deck_import; ambiguity=명사 용법도 매우 흔함",
       "entry_type": "word",
-      "deck_tags": "D8",
-      "source_files": "decks/D8_voca.txt",
+      "deck_tags": [
+        "D8"
+      ],
+      "source_files": [
+        "decks/D8_voca.txt"
+      ],
       "accepted_paraphrases_ko": "",
       "grading_notes": "",
       "common_confusions_ko": "",
       "evidence_hint": "",
+      "deck_ids": [
+        "D8"
+      ],
+      "primary_deck_id": "D8",
       "review_state": {
         "word": "reform",
         "next_review_date": "2026-05-02",
@@ -1800,12 +2023,20 @@
       "status": "active",
       "notes": "deck_import; ambiguity=기울기 뜻도 있음",
       "entry_type": "word",
-      "deck_tags": "D8",
-      "source_files": "decks/D8_voca.txt",
+      "deck_tags": [
+        "D8"
+      ],
+      "source_files": [
+        "decks/D8_voca.txt"
+      ],
       "accepted_paraphrases_ko": "",
       "grading_notes": "",
       "common_confusions_ko": "",
       "evidence_hint": "",
+      "deck_ids": [
+        "D8"
+      ],
+      "primary_deck_id": "D8",
       "review_state": {
         "word": "inclination",
         "next_review_date": "2026-05-02",
@@ -1831,12 +2062,20 @@
       "status": "active",
       "notes": "deck_import; ambiguity=유권자 뜻도 자주 쓰임",
       "entry_type": "word",
-      "deck_tags": "D8",
-      "source_files": "decks/D8_voca.txt",
+      "deck_tags": [
+        "D8"
+      ],
+      "source_files": [
+        "decks/D8_voca.txt"
+      ],
       "accepted_paraphrases_ko": "",
       "grading_notes": "",
       "common_confusions_ko": "",
       "evidence_hint": "",
+      "deck_ids": [
+        "D8"
+      ],
+      "primary_deck_id": "D8",
       "review_state": {
         "word": "constituent",
         "next_review_date": "2026-04-28",
@@ -1882,12 +2121,20 @@
       "status": "active",
       "notes": "deck_import",
       "entry_type": "word",
-      "deck_tags": "D8",
-      "source_files": "decks/D8_voca.txt",
+      "deck_tags": [
+        "D8"
+      ],
+      "source_files": [
+        "decks/D8_voca.txt"
+      ],
       "accepted_paraphrases_ko": "",
       "grading_notes": "",
       "common_confusions_ko": "",
       "evidence_hint": "",
+      "deck_ids": [
+        "D8"
+      ],
+      "primary_deck_id": "D8",
       "review_state": {
         "word": "insolent",
         "next_review_date": "2026-04-26",
@@ -1954,12 +2201,20 @@
       "status": "active",
       "notes": "deck_import; phrase_entry",
       "entry_type": "phrase",
-      "deck_tags": "D8",
-      "source_files": "decks/D8_voca.txt",
+      "deck_tags": [
+        "D8"
+      ],
+      "source_files": [
+        "decks/D8_voca.txt"
+      ],
       "accepted_paraphrases_ko": "",
       "grading_notes": "",
       "common_confusions_ko": "",
       "evidence_hint": "",
+      "deck_ids": [
+        "D8"
+      ],
+      "primary_deck_id": "D8",
       "review_state": {
         "word": "be accompanied by",
         "next_review_date": "2026-05-02",
@@ -1985,12 +2240,16 @@
       "status": "active",
       "notes": "session_import",
       "entry_type": "word",
-      "deck_tags": "",
-      "source_files": "sessions/2026-04-25_test_01.txt",
+      "deck_tags": [],
+      "source_files": [
+        "sessions/2026-04-25_test_01.txt"
+      ],
       "accepted_paraphrases_ko": "대체로; 대략; 넓게; 광범위하게",
       "grading_notes": "mostly/generally sense는 대체로/대략이면 correct; physically wide sense는 넓게/광범위하게도 허용",
       "common_confusions_ko": "broad=넓은으로만 답하면 문맥에 따라 partial",
       "evidence_hint": "core_meaning_ko=대체로; alt_meanings_ko=넓게/광범위하게; source_session=2026-04-25_test_01",
+      "deck_ids": [],
+      "primary_deck_id": "",
       "review_state": {
         "word": "broadly",
         "next_review_date": "2026-04-28",
@@ -2016,12 +2275,16 @@
       "status": "active",
       "notes": "session_import",
       "entry_type": "word",
-      "deck_tags": "",
-      "source_files": "sessions/2026-04-25_test_01.txt",
+      "deck_tags": [],
+      "source_files": [
+        "sessions/2026-04-25_test_01.txt"
+      ],
       "accepted_paraphrases_ko": "~에 의하여; 그것에 의하여; 그것에 의해; ~하는 방식으로",
       "grading_notes": "by which/by means of which 의미가 핵심; where=어디에만 답하면 wrong",
       "common_confusions_ko": "where=어디에와 혼동; thereby=그렇게 하여와 혼동 가능",
       "evidence_hint": "core_meaning_ko=그것에 의하여; alt_meanings_ko=~하는 방식으로/그것에 의해; source_session=2026-04-25_test_01",
+      "deck_ids": [],
+      "primary_deck_id": "",
       "review_state": {
         "word": "whereby",
         "next_review_date": "2026-04-28",
@@ -2047,12 +2310,16 @@
       "status": "active",
       "notes": "session_import",
       "entry_type": "word",
-      "deck_tags": "",
-      "source_files": "sessions/2026-04-25_test_01.txt",
+      "deck_tags": [],
+      "source_files": [
+        "sessions/2026-04-25_test_01.txt"
+      ],
       "accepted_paraphrases_ko": "해방하다; 자유롭게 하다; 석방하다",
       "grading_notes": "free/release 의미가 핵심; 자유롭게 만들다까지 허용",
       "common_confusions_ko": "liberal=자유주의의와 형태 혼동 가능",
       "evidence_hint": "core_meaning_ko=해방하다; alt_meanings_ko=자유롭게 하다/석방하다; source_session=2026-04-25_test_01",
+      "deck_ids": [],
+      "primary_deck_id": "",
       "review_state": {
         "word": "liberate",
         "next_review_date": "2026-04-28",
@@ -2066,7 +2333,544 @@
         "notes": "session_import"
       },
       "wrong_attempts": []
+    },
+    {
+      "word": "tremendous",
+      "pos": "adj",
+      "core_meaning_ko": "엄청난",
+      "alt_meanings_ko": "대단한; 막대한; 매우 큰",
+      "example_en": "The discovery had a tremendous impact on the field.",
+      "example_ko": "그 발견은 그 분야에 엄청난 영향을 미쳤다.",
+      "source_session": "2026-04-25_test_02",
+      "status": "active",
+      "notes": "session_import",
+      "entry_type": "word",
+      "deck_tags": [],
+      "source_files": [
+        "sessions/2026-04-25_test_02.txt"
+      ],
+      "accepted_paraphrases_ko": "엄청난; 대단한; 막대한; 매우 큰; 거대한",
+      "grading_notes": "very great in size/amount/intensity이면 full credit; 단순 물리적 크기만 말하면 문맥에 따라 partial",
+      "common_confusions_ko": "tremble=떨다와 형태 혼동; tremendous를 terrible로 오해하지 않기",
+      "evidence_hint": "core_meaning_ko=엄청난; alt_meanings_ko=대단한/막대한/매우 큰; source_session=2026-04-25_test_02",
+      "deck_ids": [],
+      "primary_deck_id": "",
+      "review_state": {
+        "word": "tremendous",
+        "next_review_date": "2026-04-28",
+        "interval_days": 3,
+        "ease": 2.5,
+        "consecutive_correct": 1,
+        "total_wrong": 0,
+        "last_seen": "2026-04-25",
+        "last_verdict": "correct",
+        "priority": 1,
+        "notes": "session_import"
+      },
+      "wrong_attempts": []
+    },
+    {
+      "word": "cope with",
+      "pos": "phrase",
+      "core_meaning_ko": "대처하다",
+      "alt_meanings_ko": "감당하다; 잘 처리하다",
+      "example_en": "Students must learn to cope with stress.",
+      "example_ko": "학생들은 스트레스에 대처하는 법을 배워야 한다.",
+      "source_session": "2026-04-25_test_02",
+      "status": "active",
+      "notes": "session_import; phrase_entry",
+      "entry_type": "phrase",
+      "deck_tags": [],
+      "source_files": [
+        "sessions/2026-04-25_test_02.txt"
+      ],
+      "accepted_paraphrases_ko": "대처하다; 감당하다; 잘 처리하다; 이겨 내다",
+      "grading_notes": "문제/스트레스/상황을 처리하거나 감당한다는 뜻이면 correct",
+      "common_confusions_ko": "copy/coup와 형태 혼동 주의",
+      "evidence_hint": "core_meaning_ko=대처하다; alt_meanings_ko=감당하다/잘 처리하다; source_session=2026-04-25_test_02",
+      "deck_ids": [],
+      "primary_deck_id": "",
+      "review_state": {
+        "word": "cope with",
+        "next_review_date": "2026-04-26",
+        "interval_days": 1,
+        "ease": 2.5,
+        "consecutive_correct": 0,
+        "total_wrong": 1,
+        "last_seen": "2026-04-25",
+        "last_verdict": "blank",
+        "priority": 2,
+        "notes": "session_import; entry_type=phrase"
+      },
+      "wrong_attempts": [
+        {
+          "timestamp": "2026-04-25T13:50:35+09:00",
+          "session_id": "2026-04-25_test_02",
+          "word": "cope with",
+          "user_answer": "",
+          "gold_meaning": "대처하다; 감당하다; 잘 처리하다",
+          "verdict": "blank",
+          "error_types": [
+            "blank"
+          ],
+          "notes": "무응답.",
+          "matched_meaning": "",
+          "rationale": "답안이 비어 있어 blank로 처리했다.",
+          "evidence": "master_words.csv: core_meaning_ko=대처하다; alt_meanings_ko=감당하다; 잘 처리하다; notes=session_import; phrase_entry",
+          "confidence": "high",
+          "accepted_range": "대처하다; 감당하다; 잘 처리하다; 이겨 내다",
+          "reason_ko": "답안이 비어 있어 미응답으로 처리했습니다.",
+          "evidence_ko": "master_words.csv의 core_meaning_ko=대처하다, alt_meanings_ko=감당하다; 잘 처리하다, notes=session_import; phrase_entry를 근거로 판단했습니다.",
+          "accepted_range_ko": "대처하다; 감당하다; 잘 처리하다; 이겨 내다",
+          "correction_ko": "cope with는 '대처하다; 감당하다'로 기억하세요.",
+          "source_file": "sessions/2026-04-25_test_02.txt"
+        }
+      ]
+    },
+    {
+      "word": "inducement",
+      "pos": "n",
+      "core_meaning_ko": "유인",
+      "alt_meanings_ko": "동기; 장려책; 유도 요인",
+      "example_en": "The bonus was an inducement to finish early.",
+      "example_ko": "그 보너스는 일찍 끝내도록 하는 유인이었다.",
+      "source_session": "2026-04-25_test_02",
+      "status": "active",
+      "notes": "session_import; normalized_from_session=inducment",
+      "entry_type": "word",
+      "deck_tags": [],
+      "source_files": [
+        "sessions/2026-04-25_test_02.txt"
+      ],
+      "accepted_paraphrases_ko": "유인; 동기; 장려책; 유도 요인; 인센티브",
+      "grading_notes": "induce에서 온 명사로 무엇을 하게 만드는 동기/유인 의미가 핵심; 추측은 conjecture/guess 쪽이라 wrong",
+      "common_confusions_ko": "induction=귀납/유도; inference/conjecture=추측과 혼동; 혼동 주의: conjecture (inducement는 유인/동기이고 conjecture는 추측이라 답안 추측과 의미가 다름; bonus as an inducement=유인; make a conjecture=추측하다)",
+      "evidence_hint": "core_meaning_ko=유인; alt_meanings_ko=동기/장려책/유도 요인; session spelling=inducment",
+      "deck_ids": [],
+      "primary_deck_id": "",
+      "review_state": {
+        "word": "inducement",
+        "next_review_date": "2026-04-26",
+        "interval_days": 1,
+        "ease": 2.5,
+        "consecutive_correct": 0,
+        "total_wrong": 1,
+        "last_seen": "2026-04-25",
+        "last_verdict": "wrong",
+        "priority": 1,
+        "notes": "session_import; word_normalized_from_session=inducment"
+      },
+      "wrong_attempts": [
+        {
+          "timestamp": "2026-04-25T13:50:35+09:00",
+          "session_id": "2026-04-25_test_02",
+          "word": "inducement",
+          "user_answer": "추측",
+          "gold_meaning": "유인; 동기; 장려책; 유도 요인",
+          "verdict": "wrong",
+          "error_types": [
+            "meaning_confusion"
+          ],
+          "notes": "세션 표기 inducment는 inducement로 정규화했다. '추측'은 conjecture/guess 쪽 의미라 기준 의미와 다르다.",
+          "matched_meaning": "",
+          "rationale": "inducement는 무엇을 하게 만드는 유인/동기이고, 제출 답안은 추측이라 의미가 맞지 않는다.",
+          "evidence": "master_words.csv: core_meaning_ko=유인; alt_meanings_ko=동기; 장려책; 유도 요인; notes=normalized_from_session=inducment",
+          "confidence": "high",
+          "accepted_range": "유인; 동기; 장려책; 유도 요인; 인센티브",
+          "reason_ko": "세션의 `inducment`는 `inducement` 오탈자로 정규화했습니다. '추측'은 conjecture/guess 의미라 inducement의 '유인/동기'와 다릅니다.",
+          "evidence_ko": "master_words.csv의 core_meaning_ko=유인, alt_meanings_ko=동기; 장려책; 유도 요인, notes=normalized_from_session=inducment를 근거로 판단했습니다.",
+          "accepted_range_ko": "유인; 동기; 장려책; 유도 요인; 인센티브",
+          "correction_ko": "inducement는 '유인; 동기; 장려책'으로 기억하세요.",
+          "source_file": "sessions/2026-04-25_test_02.txt"
+        }
+      ]
+    },
+    {
+      "word": "comprise",
+      "pos": "v",
+      "core_meaning_ko": "구성하다",
+      "alt_meanings_ko": "포함하다; ~로 이루어지다",
+      "example_en": "The committee comprises five experts.",
+      "example_ko": "그 위원회는 다섯 명의 전문가로 구성되어 있다.",
+      "source_session": "2026-04-25_test_02",
+      "status": "active",
+      "notes": "session_import",
+      "entry_type": "word",
+      "deck_tags": [],
+      "source_files": [
+        "sessions/2026-04-25_test_02.txt"
+      ],
+      "accepted_paraphrases_ko": "구성하다; 포함하다; ~로 이루어지다; 이루다",
+      "grading_notes": "전체가 부분을 포함하거나 부분들이 전체를 구성한다는 의미면 correct; compose/consist of와 방향 차이는 문맥별 주의",
+      "common_confusions_ko": "compose/consist of와 혼동; comprise of는 표준성 논쟁이 있음",
+      "evidence_hint": "core_meaning_ko=구성하다; alt_meanings_ko=포함하다/~로 이루어지다; source_session=2026-04-25_test_02",
+      "deck_ids": [],
+      "primary_deck_id": "",
+      "review_state": {
+        "word": "comprise",
+        "next_review_date": "2026-04-28",
+        "interval_days": 3,
+        "ease": 2.5,
+        "consecutive_correct": 1,
+        "total_wrong": 0,
+        "last_seen": "2026-04-25",
+        "last_verdict": "correct",
+        "priority": 1,
+        "notes": "session_import"
+      },
+      "wrong_attempts": []
+    },
+    {
+      "word": "allegiance",
+      "pos": "n",
+      "core_meaning_ko": "충성",
+      "alt_meanings_ko": "충실; 지지; 충성심",
+      "example_en": "Citizens pledged allegiance to the country.",
+      "example_ko": "시민들은 그 나라에 충성을 맹세했다.",
+      "source_session": "2026-04-25_test_02",
+      "status": "active",
+      "notes": "session_import",
+      "entry_type": "word",
+      "deck_tags": [],
+      "source_files": [
+        "sessions/2026-04-25_test_02.txt"
+      ],
+      "accepted_paraphrases_ko": "충성; 충성심; 충실; 지지",
+      "grading_notes": "대상에 대한 loyalty가 핵심; 아군/동맹군은 ally/alliance 쪽이라 wrong",
+      "common_confusions_ko": "alliance=동맹; ally=동맹국/아군과 형태 혼동; 혼동 주의: alliance (allegiance는 충성이고 alliance는 동맹/아군 쪽이라 형태가 비슷해도 의미가 다름; pledge allegiance=충성을 맹세하다; form an alliance=동맹을 맺다)",
+      "evidence_hint": "core_meaning_ko=충성; alt_meanings_ko=충실/지지/충성심; source_session=2026-04-25_test_02",
+      "deck_ids": [],
+      "primary_deck_id": "",
+      "review_state": {
+        "word": "allegiance",
+        "next_review_date": "2026-04-26",
+        "interval_days": 1,
+        "ease": 2.5,
+        "consecutive_correct": 0,
+        "total_wrong": 1,
+        "last_seen": "2026-04-25",
+        "last_verdict": "wrong",
+        "priority": 1,
+        "notes": "session_import"
+      },
+      "wrong_attempts": [
+        {
+          "timestamp": "2026-04-25T13:50:35+09:00",
+          "session_id": "2026-04-25_test_02",
+          "word": "allegiance",
+          "user_answer": "아군",
+          "gold_meaning": "충성; 충실; 지지; 충성심",
+          "verdict": "wrong",
+          "error_types": [
+            "meaning_confusion"
+          ],
+          "notes": "'아군'은 ally/alliance 쪽 의미이고 allegiance의 loyalty 의미와 다르다.",
+          "matched_meaning": "",
+          "rationale": "allegiance는 특정 대상에 대한 충성/충실을 뜻하므로 아군은 정답 범위에 들어가지 않는다.",
+          "evidence": "master_words.csv: core_meaning_ko=충성; alt_meanings_ko=충실; 지지; 충성심; common_confusions_ko=alliance=동맹; ally=동맹국/아군과 형태 혼동",
+          "confidence": "high",
+          "accepted_range": "충성; 충성심; 충실; 지지",
+          "reason_ko": "'아군'은 ally/alliance 쪽 의미이고 allegiance의 핵심인 '충성/충성심'과 다릅니다.",
+          "evidence_ko": "master_words.csv의 core_meaning_ko=충성, alt_meanings_ko=충실; 지지; 충성심, common_confusions_ko=alliance=동맹; ally=동맹국/아군과 형태 혼동을 근거로 판단했습니다.",
+          "accepted_range_ko": "충성; 충성심; 충실; 지지",
+          "correction_ko": "allegiance는 '충성; 충성심'으로 기억하세요.",
+          "source_file": "sessions/2026-04-25_test_02.txt"
+        }
+      ]
+    },
+    {
+      "word": "idiosyncrasy",
+      "pos": "n",
+      "core_meaning_ko": "특이한 성질",
+      "alt_meanings_ko": "개인적 특성; 특이성; 특유의 버릇",
+      "example_en": "One idiosyncrasy of the author is his use of long footnotes.",
+      "example_ko": "그 작가의 특이한 점 하나는 긴 각주를 쓴다는 것이다.",
+      "source_session": "2026-04-25_test_02",
+      "status": "active",
+      "notes": "session_import",
+      "entry_type": "word",
+      "deck_tags": [],
+      "source_files": [
+        "sessions/2026-04-25_test_02.txt"
+      ],
+      "accepted_paraphrases_ko": "특이한 성질; 개인적 특성; 특이성; 특유의 버릇; 고유한 특징",
+      "grading_notes": "특징만 쓰면 너무 넓고 특이함/개인 고유성까지 있어야 full credit",
+      "common_confusions_ko": "idiom과 형태 혼동; ordinary feature=일반 특징으로만 기억하면 불충분",
+      "evidence_hint": "core_meaning_ko=특이한 성질; alt_meanings_ko=개인적 특성/특이성/특유의 버릇; source_session=2026-04-25_test_02",
+      "deck_ids": [],
+      "primary_deck_id": "",
+      "review_state": {
+        "word": "idiosyncrasy",
+        "next_review_date": "2026-04-26",
+        "interval_days": 1,
+        "ease": 2.5,
+        "consecutive_correct": 0,
+        "total_wrong": 1,
+        "last_seen": "2026-04-25",
+        "last_verdict": "partial",
+        "priority": 2,
+        "notes": "session_import"
+      },
+      "wrong_attempts": [
+        {
+          "timestamp": "2026-04-25T13:50:35+09:00",
+          "session_id": "2026-04-25_test_02",
+          "word": "idiosyncrasy",
+          "user_answer": "특징",
+          "gold_meaning": "특이한 성질; 개인적 특성; 특이성; 특유의 버릇",
+          "verdict": "partial",
+          "error_types": [
+            "accepted_but_imprecise"
+          ],
+          "notes": "'특징'은 방향은 맞지만 idiosyncrasy의 특이함/개인 고유성 뉘앙스가 빠져 너무 넓다.",
+          "matched_meaning": "특성/특징",
+          "rationale": "일반 특징이 아니라 특유의 성질이나 버릇이라는 점이 필요해 부분 정답으로 처리했다.",
+          "evidence": "master_words.csv: core_meaning_ko=특이한 성질; alt_meanings_ko=개인적 특성; 특이성; 특유의 버릇; grading_notes=특징만 쓰면 너무 넓고 특이함/개인 고유성까지 있어야 full credit",
+          "confidence": "high",
+          "accepted_range": "특이한 성질; 개인적 특성; 특이성; 특유의 버릇; 고유한 특징",
+          "reason_ko": "'특징'은 일부 맞지만 너무 넓습니다. idiosyncrasy는 보통 '특이한 성질/개인 고유의 특성/특유의 버릇'까지 포함해야 합니다.",
+          "evidence_ko": "master_words.csv의 core_meaning_ko=특이한 성질, alt_meanings_ko=개인적 특성; 특이성; 특유의 버릇, grading_notes를 근거로 판단했습니다.",
+          "accepted_range_ko": "특이한 성질; 개인적 특성; 특이성; 특유의 버릇; 고유한 특징",
+          "correction_ko": "idiosyncrasy는 '특이한 성질; 특유의 버릇'으로 기억하세요.",
+          "source_file": "sessions/2026-04-25_test_02.txt"
+        }
+      ]
+    },
+    {
+      "word": "minute",
+      "pos": "adj",
+      "core_meaning_ko": "아주 작은",
+      "alt_meanings_ko": "미세한; 세밀한",
+      "example_en": "The scientist noticed minute changes in the sample.",
+      "example_ko": "그 과학자는 표본의 미세한 변화를 알아차렸다.",
+      "source_session": "2026-04-25_test_02",
+      "status": "active",
+      "notes": "session_import",
+      "entry_type": "word",
+      "deck_tags": [],
+      "source_files": [
+        "sessions/2026-04-25_test_02.txt"
+      ],
+      "accepted_paraphrases_ko": "아주 작은; 작은; 미세한; 세밀한",
+      "grading_notes": "adj minute는 발음이 '마이뉴트'에 가까우며 아주 작은/미세한 의미; time unit minute=분과 구분",
+      "common_confusions_ko": "minute=분과 다의어 혼동",
+      "evidence_hint": "core_meaning_ko=아주 작은; alt_meanings_ko=미세한/세밀한; source_session=2026-04-25_test_02",
+      "deck_ids": [],
+      "primary_deck_id": "",
+      "review_state": {
+        "word": "minute",
+        "next_review_date": "2026-04-28",
+        "interval_days": 3,
+        "ease": 2.5,
+        "consecutive_correct": 1,
+        "total_wrong": 0,
+        "last_seen": "2026-04-25",
+        "last_verdict": "correct",
+        "priority": 1,
+        "notes": "session_import"
+      },
+      "wrong_attempts": []
+    },
+    {
+      "word": "markedly",
+      "pos": "adv",
+      "core_meaning_ko": "현저하게",
+      "alt_meanings_ko": "뚜렷하게; 눈에 띄게",
+      "example_en": "The results improved markedly after training.",
+      "example_ko": "훈련 후 결과가 현저하게 향상되었다.",
+      "source_session": "2026-04-25_test_02",
+      "status": "active",
+      "notes": "session_import",
+      "entry_type": "word",
+      "deck_tags": [],
+      "source_files": [
+        "sessions/2026-04-25_test_02.txt"
+      ],
+      "accepted_paraphrases_ko": "현저하게; 뚜렷하게; 눈에 띄게; 상당히",
+      "grading_notes": "정도 차이가 명확히 드러나는 의미가 핵심; 인상 깊게는 impressively/memorably 쪽이라 full credit 불가",
+      "common_confusions_ko": "marked=표시된/뚜렷한; impressive=인상적인과 혼동; 혼동 주의: impressively (markedly는 현저하게/뚜렷하게이고 impressively는 인상 깊게라 결과 변화 정도를 나타내지 않음; improve markedly=현저하게 향상되다; perform impressively=인상 깊게 해내다)",
+      "evidence_hint": "core_meaning_ko=현저하게; alt_meanings_ko=뚜렷하게/눈에 띄게; source_session=2026-04-25_test_02",
+      "deck_ids": [],
+      "primary_deck_id": "",
+      "review_state": {
+        "word": "markedly",
+        "next_review_date": "2026-04-26",
+        "interval_days": 1,
+        "ease": 2.5,
+        "consecutive_correct": 0,
+        "total_wrong": 1,
+        "last_seen": "2026-04-25",
+        "last_verdict": "wrong",
+        "priority": 1,
+        "notes": "session_import"
+      },
+      "wrong_attempts": [
+        {
+          "timestamp": "2026-04-25T13:50:35+09:00",
+          "session_id": "2026-04-25_test_02",
+          "word": "markedly",
+          "user_answer": "인상깊게",
+          "gold_meaning": "현저하게; 뚜렷하게; 눈에 띄게",
+          "verdict": "wrong",
+          "error_types": [
+            "meaning_confusion",
+            "nuance_mismatch"
+          ],
+          "notes": "'인상깊게'는 impressively/memorably에 가깝고 markedly의 현저한 정도 차이를 나타내지 못한다.",
+          "matched_meaning": "",
+          "rationale": "markedly는 변화나 차이가 뚜렷하게 드러나는 정도 부사이므로 제출 답안과 의미가 어긋난다.",
+          "evidence": "master_words.csv: core_meaning_ko=현저하게; alt_meanings_ko=뚜렷하게; 눈에 띄게; grading_notes=정도 차이가 명확히 드러나는 의미가 핵심",
+          "confidence": "high",
+          "accepted_range": "현저하게; 뚜렷하게; 눈에 띄게; 상당히",
+          "reason_ko": "'인상깊게'는 impressively/memorably에 가깝고, markedly의 '현저하게/뚜렷하게'라는 정도 차이 의미와 다릅니다.",
+          "evidence_ko": "master_words.csv의 core_meaning_ko=현저하게, alt_meanings_ko=뚜렷하게; 눈에 띄게, grading_notes를 근거로 판단했습니다.",
+          "accepted_range_ko": "현저하게; 뚜렷하게; 눈에 띄게; 상당히",
+          "correction_ko": "markedly는 '현저하게; 뚜렷하게; 눈에 띄게'로 기억하세요.",
+          "source_file": "sessions/2026-04-25_test_02.txt"
+        }
+      ]
+    },
+    {
+      "word": "disseminate",
+      "pos": "v",
+      "core_meaning_ko": "퍼뜨리다",
+      "alt_meanings_ko": "전파하다; 보급하다; 유포하다",
+      "example_en": "The organization disseminates health information online.",
+      "example_ko": "그 단체는 건강 정보를 온라인으로 보급한다.",
+      "source_session": "2026-04-25_test_02",
+      "status": "active",
+      "notes": "session_import",
+      "entry_type": "word",
+      "deck_tags": [],
+      "source_files": [
+        "sessions/2026-04-25_test_02.txt"
+      ],
+      "accepted_paraphrases_ko": "퍼뜨리다; 전파하다; 보급하다; 유포하다",
+      "grading_notes": "정보/지식/생각을 널리 퍼뜨린다는 의미가 핵심",
+      "common_confusions_ko": "determine/designate와 형태 혼동 주의",
+      "evidence_hint": "core_meaning_ko=퍼뜨리다; alt_meanings_ko=전파하다/보급하다/유포하다; source_session=2026-04-25_test_02",
+      "deck_ids": [],
+      "primary_deck_id": "",
+      "review_state": {
+        "word": "disseminate",
+        "next_review_date": "2026-04-26",
+        "interval_days": 1,
+        "ease": 2.5,
+        "consecutive_correct": 0,
+        "total_wrong": 1,
+        "last_seen": "2026-04-25",
+        "last_verdict": "blank",
+        "priority": 2,
+        "notes": "session_import"
+      },
+      "wrong_attempts": [
+        {
+          "timestamp": "2026-04-25T13:50:35+09:00",
+          "session_id": "2026-04-25_test_02",
+          "word": "disseminate",
+          "user_answer": "",
+          "gold_meaning": "퍼뜨리다; 전파하다; 보급하다; 유포하다",
+          "verdict": "blank",
+          "error_types": [
+            "blank"
+          ],
+          "notes": "무응답.",
+          "matched_meaning": "",
+          "rationale": "답안이 비어 있어 blank로 처리했다.",
+          "evidence": "master_words.csv: core_meaning_ko=퍼뜨리다; alt_meanings_ko=전파하다; 보급하다; 유포하다",
+          "confidence": "high",
+          "accepted_range": "퍼뜨리다; 전파하다; 보급하다; 유포하다",
+          "reason_ko": "답안이 비어 있어 미응답으로 처리했습니다.",
+          "evidence_ko": "master_words.csv의 core_meaning_ko=퍼뜨리다, alt_meanings_ko=전파하다; 보급하다; 유포하다를 근거로 판단했습니다.",
+          "accepted_range_ko": "퍼뜨리다; 전파하다; 보급하다; 유포하다",
+          "correction_ko": "disseminate는 '퍼뜨리다; 전파하다; 보급하다'로 기억하세요.",
+          "source_file": "sessions/2026-04-25_test_02.txt"
+        }
+      ]
+    },
+    {
+      "word": "detrimental",
+      "pos": "adj",
+      "core_meaning_ko": "해로운",
+      "alt_meanings_ko": "손해를 끼치는; 불리한",
+      "example_en": "Excessive noise can be detrimental to learning.",
+      "example_ko": "과도한 소음은 학습에 해로울 수 있다.",
+      "source_session": "2026-04-25_test_02",
+      "status": "active",
+      "notes": "session_import",
+      "entry_type": "word",
+      "deck_tags": [],
+      "source_files": [
+        "sessions/2026-04-25_test_02.txt"
+      ],
+      "accepted_paraphrases_ko": "해로운; 손해를 끼치는; 불리한; 유해한",
+      "grading_notes": "detrimental to 형태로 ~에 해로운 의미가 자주 쓰임",
+      "common_confusions_ko": "beneficial=유익한의 반대; detriment=손해와 연결",
+      "evidence_hint": "core_meaning_ko=해로운; alt_meanings_ko=손해를 끼치는/불리한; source_session=2026-04-25_test_02",
+      "deck_ids": [],
+      "primary_deck_id": "",
+      "review_state": {
+        "word": "detrimental",
+        "next_review_date": "2026-04-26",
+        "interval_days": 1,
+        "ease": 2.5,
+        "consecutive_correct": 0,
+        "total_wrong": 1,
+        "last_seen": "2026-04-25",
+        "last_verdict": "blank",
+        "priority": 2,
+        "notes": "session_import"
+      },
+      "wrong_attempts": [
+        {
+          "timestamp": "2026-04-25T13:50:35+09:00",
+          "session_id": "2026-04-25_test_02",
+          "word": "detrimental",
+          "user_answer": "",
+          "gold_meaning": "해로운; 손해를 끼치는; 불리한",
+          "verdict": "blank",
+          "error_types": [
+            "blank"
+          ],
+          "notes": "무응답.",
+          "matched_meaning": "",
+          "rationale": "답안이 비어 있어 blank로 처리했다.",
+          "evidence": "master_words.csv: core_meaning_ko=해로운; alt_meanings_ko=손해를 끼치는; 불리한",
+          "confidence": "high",
+          "accepted_range": "해로운; 손해를 끼치는; 불리한; 유해한",
+          "reason_ko": "답안이 비어 있어 미응답으로 처리했습니다.",
+          "evidence_ko": "master_words.csv의 core_meaning_ko=해로운, alt_meanings_ko=손해를 끼치는; 불리한을 근거로 판단했습니다.",
+          "accepted_range_ko": "해로운; 손해를 끼치는; 불리한; 유해한",
+          "correction_ko": "detrimental은 '해로운; 손해를 끼치는'으로 기억하세요.",
+          "source_file": "sessions/2026-04-25_test_02.txt"
+        }
+      ]
     }
   ],
-  "confusion_pairs": []
+  "confusion_pairs": [
+    {
+      "word_a": "inducement",
+      "word_b": "conjecture",
+      "reason": "inducement는 유인/동기이고 conjecture는 추측이라 답안 추측과 의미가 다름",
+      "count": 1,
+      "last_seen": "2026-04-25",
+      "example_hint": "bonus as an inducement=유인; make a conjecture=추측하다"
+    },
+    {
+      "word_a": "allegiance",
+      "word_b": "alliance",
+      "reason": "allegiance는 충성이고 alliance는 동맹/아군 쪽이라 형태가 비슷해도 의미가 다름",
+      "count": 1,
+      "last_seen": "2026-04-25",
+      "example_hint": "pledge allegiance=충성을 맹세하다; form an alliance=동맹을 맺다"
+    },
+    {
+      "word_a": "markedly",
+      "word_b": "impressively",
+      "reason": "markedly는 현저하게/뚜렷하게이고 impressively는 인상 깊게라 결과 변화 정도를 나타내지 않음",
+      "count": 1,
+      "last_seen": "2026-04-25",
+      "example_hint": "improve markedly=현저하게 향상되다; perform impressively=인상 깊게 해내다"
+    }
+  ]
 }
