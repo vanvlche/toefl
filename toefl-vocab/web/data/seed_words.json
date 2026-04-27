@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-04-26T01:04:28.591126+00:00",
-  "source_hash": "6bcb73a507d7f902809e265bc1971a948bf1d53f8231df23312066309545efc7",
+  "generated_at": "2026-04-26T05:57:51.082239+00:00",
+  "source_hash": "052adfcb473c98c05f898abd9e5c3d3d4ee0d8eeb74c396347f990527f2cb859",
   "source_files": [
     "data/master_words.csv",
     "data/review_queue.csv",
@@ -15,6 +15,12 @@
       "display_name": "D8",
       "word_count": 27,
       "source_file": "decks/D8_voca.txt"
+    },
+    {
+      "deck_id": "D9",
+      "display_name": "D9",
+      "word_count": 27,
+      "source_file": "decks/D9_voca.txt"
     }
   ],
   "words": [
@@ -37,6 +43,7 @@
       "evidence_hint": "core_meaning_ko=간신히; alt_meanings_ko=거의 ~아니게/겨우; example_en=The plant barely survived the winter.",
       "deck_ids": [],
       "primary_deck_id": "",
+      "import_notes": "",
       "review_state": {
         "word": "barely",
         "next_review_date": "2026-04-25",
@@ -90,6 +97,7 @@
       "evidence_hint": "",
       "deck_ids": [],
       "primary_deck_id": "",
+      "import_notes": "",
       "review_state": {
         "word": "strew",
         "next_review_date": "2026-04-27",
@@ -123,6 +131,7 @@
       "evidence_hint": "",
       "deck_ids": [],
       "primary_deck_id": "",
+      "import_notes": "",
       "review_state": {
         "word": "encapsulate",
         "next_review_date": "2026-04-27",
@@ -156,6 +165,7 @@
       "evidence_hint": "core_meaning_ko=다루기 힘든; alt_meanings_ko=거추장스러운/조작하기 불편한; example_en=The box was too unwieldy to carry alone.",
       "deck_ids": [],
       "primary_deck_id": "",
+      "import_notes": "",
       "review_state": {
         "word": "unwieldy",
         "next_review_date": "2026-04-27",
@@ -189,6 +199,7 @@
       "evidence_hint": "",
       "deck_ids": [],
       "primary_deck_id": "",
+      "import_notes": "",
       "review_state": {
         "word": "subsequent",
         "next_review_date": "2026-04-27",
@@ -222,6 +233,7 @@
       "evidence_hint": "core_meaning_ko=두드러진; alt_meanings_ko=눈에 띄는/인상적인; example_en=There is a striking difference between the two groups.",
       "deck_ids": [],
       "primary_deck_id": "",
+      "import_notes": "",
       "review_state": {
         "word": "striking",
         "next_review_date": "2026-04-25",
@@ -274,6 +286,7 @@
       "evidence_hint": "",
       "deck_ids": [],
       "primary_deck_id": "",
+      "import_notes": "",
       "review_state": {
         "word": "rigid",
         "next_review_date": "2026-04-27",
@@ -307,6 +320,7 @@
       "evidence_hint": "pos=v/adj/n; core_meaning_ko=놓다/정하다; alt_meanings_ko=고정하다/굳은/한 벌/집합; example_en=We need to set a clear goal.",
       "deck_ids": [],
       "primary_deck_id": "",
+      "import_notes": "",
       "review_state": {
         "word": "set",
         "next_review_date": "2026-04-27",
@@ -340,6 +354,7 @@
       "evidence_hint": "",
       "deck_ids": [],
       "primary_deck_id": "",
+      "import_notes": "",
       "review_state": {
         "word": "exude",
         "next_review_date": "2026-04-25",
@@ -392,6 +407,7 @@
       "evidence_hint": "",
       "deck_ids": [],
       "primary_deck_id": "",
+      "import_notes": "",
       "review_state": {
         "word": "precede",
         "next_review_date": "2026-04-27",
@@ -425,6 +441,7 @@
       "evidence_hint": "pos=n; core_meaning_ko=기사/물품; alt_meanings_ko=관사/조항/논문; example_en=I read an article about climate policy.",
       "deck_ids": [],
       "primary_deck_id": "",
+      "import_notes": "",
       "review_state": {
         "word": "article",
         "next_review_date": "2026-04-27",
@@ -458,6 +475,7 @@
       "evidence_hint": "",
       "deck_ids": [],
       "primary_deck_id": "",
+      "import_notes": "",
       "review_state": {
         "word": "rudiments",
         "next_review_date": "2026-04-25",
@@ -510,6 +528,7 @@
       "evidence_hint": "core_meaning_ko=사망률/죽음; alt_meanings_ko=필멸성; example_en=The report tracked infant mortality over time.",
       "deck_ids": [],
       "primary_deck_id": "",
+      "import_notes": "",
       "review_state": {
         "word": "mortality",
         "next_review_date": "2026-04-27",
@@ -543,6 +562,7 @@
       "evidence_hint": "core_meaning_ko=제약하다; alt_meanings_ko=억누르다/제한하다; example_en=Limited funding constrained the project.",
       "deck_ids": [],
       "primary_deck_id": "",
+      "import_notes": "",
       "review_state": {
         "word": "constrain",
         "next_review_date": "2026-04-25",
@@ -595,6 +615,7 @@
       "evidence_hint": "pos=n/v; core_meaning_ko=주제/대상; alt_meanings_ko=과목/~을 겪게 하다/복종시키다; example_en=The topic was too sensitive to raise as a subject.",
       "deck_ids": [],
       "primary_deck_id": "",
+      "import_notes": "",
       "review_state": {
         "word": "subject",
         "next_review_date": "2026-04-27",
@@ -634,6 +655,7 @@
         "D8"
       ],
       "primary_deck_id": "D8",
+      "import_notes": "",
       "review_state": {
         "word": "eclectic",
         "next_review_date": "2026-04-26",
@@ -734,6 +756,7 @@
         "D8"
       ],
       "primary_deck_id": "D8",
+      "import_notes": "",
       "review_state": {
         "word": "intricate",
         "next_review_date": "2026-04-26",
@@ -832,6 +855,7 @@
         "D8"
       ],
       "primary_deck_id": "D8",
+      "import_notes": "",
       "review_state": {
         "word": "potent",
         "next_review_date": "2026-05-09",
@@ -871,6 +895,7 @@
         "D8"
       ],
       "primary_deck_id": "D8",
+      "import_notes": "",
       "review_state": {
         "word": "peril",
         "next_review_date": "2026-04-26",
@@ -969,6 +994,7 @@
         "D8"
       ],
       "primary_deck_id": "D8",
+      "import_notes": "",
       "review_state": {
         "word": "palatial",
         "next_review_date": "2026-04-26",
@@ -1051,6 +1077,7 @@
         "D8"
       ],
       "primary_deck_id": "D8",
+      "import_notes": "",
       "review_state": {
         "word": "turmoil",
         "next_review_date": "2026-04-26",
@@ -1131,6 +1158,7 @@
         "D8"
       ],
       "primary_deck_id": "D8",
+      "import_notes": "",
       "review_state": {
         "word": "preeminent",
         "next_review_date": "2026-05-02",
@@ -1170,6 +1198,7 @@
         "D8"
       ],
       "primary_deck_id": "D8",
+      "import_notes": "",
       "review_state": {
         "word": "recompense",
         "next_review_date": "2026-04-28",
@@ -1228,6 +1257,7 @@
         "D8"
       ],
       "primary_deck_id": "D8",
+      "import_notes": "",
       "review_state": {
         "word": "crude",
         "next_review_date": "2026-04-26",
@@ -1310,6 +1340,7 @@
         "D8"
       ],
       "primary_deck_id": "D8",
+      "import_notes": "",
       "review_state": {
         "word": "proliferate",
         "next_review_date": "2026-05-02",
@@ -1349,6 +1380,7 @@
         "D8"
       ],
       "primary_deck_id": "D8",
+      "import_notes": "",
       "review_state": {
         "word": "assess",
         "next_review_date": "2026-05-02",
@@ -1388,6 +1420,7 @@
         "D8"
       ],
       "primary_deck_id": "D8",
+      "import_notes": "",
       "review_state": {
         "word": "scrutiny",
         "next_review_date": "2026-05-02",
@@ -1427,6 +1460,7 @@
         "D8"
       ],
       "primary_deck_id": "D8",
+      "import_notes": "",
       "review_state": {
         "word": "acute",
         "next_review_date": "2026-05-02",
@@ -1466,6 +1500,7 @@
         "D8"
       ],
       "primary_deck_id": "D8",
+      "import_notes": "",
       "review_state": {
         "word": "inadvertently",
         "next_review_date": "2026-04-28",
@@ -1524,6 +1559,7 @@
         "D8"
       ],
       "primary_deck_id": "D8",
+      "import_notes": "",
       "review_state": {
         "word": "arduous",
         "next_review_date": "2026-04-26",
@@ -1622,6 +1658,7 @@
         "D8"
       ],
       "primary_deck_id": "D8",
+      "import_notes": "",
       "review_state": {
         "word": "materialize",
         "next_review_date": "2026-04-26",
@@ -1685,6 +1722,7 @@
         "D8"
       ],
       "primary_deck_id": "D8",
+      "import_notes": "",
       "review_state": {
         "word": "demise",
         "next_review_date": "2026-05-02",
@@ -1724,6 +1762,7 @@
         "D8"
       ],
       "primary_deck_id": "D8",
+      "import_notes": "",
       "review_state": {
         "word": "deem",
         "next_review_date": "2026-04-28",
@@ -1782,6 +1821,7 @@
         "D8"
       ],
       "primary_deck_id": "D8",
+      "import_notes": "",
       "review_state": {
         "word": "profuse",
         "next_review_date": "2026-04-26",
@@ -1862,6 +1902,7 @@
         "D8"
       ],
       "primary_deck_id": "D8",
+      "import_notes": "",
       "review_state": {
         "word": "ornament",
         "next_review_date": "2026-05-02",
@@ -1901,6 +1942,7 @@
         "D8"
       ],
       "primary_deck_id": "D8",
+      "import_notes": "",
       "review_state": {
         "word": "demolish",
         "next_review_date": "2026-04-28",
@@ -1959,6 +2001,7 @@
         "D8"
       ],
       "primary_deck_id": "D8",
+      "import_notes": "",
       "review_state": {
         "word": "voracious",
         "next_review_date": "2026-05-02",
@@ -1998,6 +2041,7 @@
         "D8"
       ],
       "primary_deck_id": "D8",
+      "import_notes": "",
       "review_state": {
         "word": "reform",
         "next_review_date": "2026-05-02",
@@ -2037,6 +2081,7 @@
         "D8"
       ],
       "primary_deck_id": "D8",
+      "import_notes": "",
       "review_state": {
         "word": "inclination",
         "next_review_date": "2026-05-02",
@@ -2076,6 +2121,7 @@
         "D8"
       ],
       "primary_deck_id": "D8",
+      "import_notes": "",
       "review_state": {
         "word": "constituent",
         "next_review_date": "2026-04-28",
@@ -2135,6 +2181,7 @@
         "D8"
       ],
       "primary_deck_id": "D8",
+      "import_notes": "",
       "review_state": {
         "word": "insolent",
         "next_review_date": "2026-04-26",
@@ -2215,6 +2262,7 @@
         "D8"
       ],
       "primary_deck_id": "D8",
+      "import_notes": "",
       "review_state": {
         "word": "be accompanied by",
         "next_review_date": "2026-05-02",
@@ -2250,6 +2298,7 @@
       "evidence_hint": "core_meaning_ko=대체로; alt_meanings_ko=넓게/광범위하게; source_session=2026-04-25_test_01",
       "deck_ids": [],
       "primary_deck_id": "",
+      "import_notes": "",
       "review_state": {
         "word": "broadly",
         "next_review_date": "2026-04-28",
@@ -2285,6 +2334,7 @@
       "evidence_hint": "core_meaning_ko=그것에 의하여; alt_meanings_ko=~하는 방식으로/그것에 의해; source_session=2026-04-25_test_01",
       "deck_ids": [],
       "primary_deck_id": "",
+      "import_notes": "",
       "review_state": {
         "word": "whereby",
         "next_review_date": "2026-04-28",
@@ -2320,6 +2370,7 @@
       "evidence_hint": "core_meaning_ko=해방하다; alt_meanings_ko=자유롭게 하다/석방하다; source_session=2026-04-25_test_01",
       "deck_ids": [],
       "primary_deck_id": "",
+      "import_notes": "",
       "review_state": {
         "word": "liberate",
         "next_review_date": "2026-04-28",
@@ -2355,6 +2406,7 @@
       "evidence_hint": "core_meaning_ko=엄청난; alt_meanings_ko=대단한/막대한/매우 큰; source_session=2026-04-25_test_02",
       "deck_ids": [],
       "primary_deck_id": "",
+      "import_notes": "",
       "review_state": {
         "word": "tremendous",
         "next_review_date": "2026-04-28",
@@ -2380,16 +2432,22 @@
       "status": "active",
       "notes": "session_import; phrase_entry",
       "entry_type": "phrase",
-      "deck_tags": [],
+      "deck_tags": [
+        "D9"
+      ],
       "source_files": [
-        "sessions/2026-04-25_test_02.txt"
+        "sessions/2026-04-25_test_02.txt",
+        "decks/D9_voca.txt"
       ],
       "accepted_paraphrases_ko": "대처하다; 감당하다; 잘 처리하다; 이겨 내다",
       "grading_notes": "문제/스트레스/상황을 처리하거나 감당한다는 뜻이면 correct",
       "common_confusions_ko": "copy/coup와 형태 혼동 주의",
       "evidence_hint": "core_meaning_ko=대처하다; alt_meanings_ko=감당하다/잘 처리하다; source_session=2026-04-25_test_02",
-      "deck_ids": [],
-      "primary_deck_id": "",
+      "deck_ids": [
+        "D9"
+      ],
+      "primary_deck_id": "D9",
+      "import_notes": "",
       "review_state": {
         "word": "cope with",
         "next_review_date": "2026-04-26",
@@ -2438,16 +2496,22 @@
       "status": "active",
       "notes": "session_import; normalized_from_session=inducment",
       "entry_type": "word",
-      "deck_tags": [],
+      "deck_tags": [
+        "D9"
+      ],
       "source_files": [
-        "sessions/2026-04-25_test_02.txt"
+        "sessions/2026-04-25_test_02.txt",
+        "decks/D9_voca.txt"
       ],
       "accepted_paraphrases_ko": "유인; 동기; 장려책; 유도 요인; 인센티브",
       "grading_notes": "induce에서 온 명사로 무엇을 하게 만드는 동기/유인 의미가 핵심; 추측은 conjecture/guess 쪽이라 wrong",
       "common_confusions_ko": "induction=귀납/유도; inference/conjecture=추측과 혼동; 혼동 주의: conjecture (inducement는 유인/동기이고 conjecture는 추측이라 답안 추측과 의미가 다름; bonus as an inducement=유인; make a conjecture=추측하다)",
       "evidence_hint": "core_meaning_ko=유인; alt_meanings_ko=동기/장려책/유도 요인; session spelling=inducment",
-      "deck_ids": [],
-      "primary_deck_id": "",
+      "deck_ids": [
+        "D9"
+      ],
+      "primary_deck_id": "D9",
+      "import_notes": "",
       "review_state": {
         "word": "inducement",
         "next_review_date": "2026-04-26",
@@ -2496,16 +2560,22 @@
       "status": "active",
       "notes": "session_import",
       "entry_type": "word",
-      "deck_tags": [],
+      "deck_tags": [
+        "D9"
+      ],
       "source_files": [
-        "sessions/2026-04-25_test_02.txt"
+        "sessions/2026-04-25_test_02.txt",
+        "decks/D9_voca.txt"
       ],
       "accepted_paraphrases_ko": "구성하다; 포함하다; ~로 이루어지다; 이루다",
       "grading_notes": "전체가 부분을 포함하거나 부분들이 전체를 구성한다는 의미면 correct; compose/consist of와 방향 차이는 문맥별 주의",
       "common_confusions_ko": "compose/consist of와 혼동; comprise of는 표준성 논쟁이 있음",
       "evidence_hint": "core_meaning_ko=구성하다; alt_meanings_ko=포함하다/~로 이루어지다; source_session=2026-04-25_test_02",
-      "deck_ids": [],
-      "primary_deck_id": "",
+      "deck_ids": [
+        "D9"
+      ],
+      "primary_deck_id": "D9",
+      "import_notes": "",
       "review_state": {
         "word": "comprise",
         "next_review_date": "2026-04-28",
@@ -2531,16 +2601,22 @@
       "status": "active",
       "notes": "session_import",
       "entry_type": "word",
-      "deck_tags": [],
+      "deck_tags": [
+        "D9"
+      ],
       "source_files": [
-        "sessions/2026-04-25_test_02.txt"
+        "sessions/2026-04-25_test_02.txt",
+        "decks/D9_voca.txt"
       ],
       "accepted_paraphrases_ko": "충성; 충성심; 충실; 지지",
       "grading_notes": "대상에 대한 loyalty가 핵심; 아군/동맹군은 ally/alliance 쪽이라 wrong",
       "common_confusions_ko": "alliance=동맹; ally=동맹국/아군과 형태 혼동; 혼동 주의: alliance (allegiance는 충성이고 alliance는 동맹/아군 쪽이라 형태가 비슷해도 의미가 다름; pledge allegiance=충성을 맹세하다; form an alliance=동맹을 맺다)",
       "evidence_hint": "core_meaning_ko=충성; alt_meanings_ko=충실/지지/충성심; source_session=2026-04-25_test_02",
-      "deck_ids": [],
-      "primary_deck_id": "",
+      "deck_ids": [
+        "D9"
+      ],
+      "primary_deck_id": "D9",
+      "import_notes": "",
       "review_state": {
         "word": "allegiance",
         "next_review_date": "2026-04-26",
@@ -2589,16 +2665,22 @@
       "status": "active",
       "notes": "session_import",
       "entry_type": "word",
-      "deck_tags": [],
+      "deck_tags": [
+        "D9"
+      ],
       "source_files": [
-        "sessions/2026-04-25_test_02.txt"
+        "sessions/2026-04-25_test_02.txt",
+        "decks/D9_voca.txt"
       ],
       "accepted_paraphrases_ko": "특이한 성질; 개인적 특성; 특이성; 특유의 버릇; 고유한 특징",
       "grading_notes": "특징만 쓰면 너무 넓고 특이함/개인 고유성까지 있어야 full credit",
       "common_confusions_ko": "idiom과 형태 혼동; ordinary feature=일반 특징으로만 기억하면 불충분",
       "evidence_hint": "core_meaning_ko=특이한 성질; alt_meanings_ko=개인적 특성/특이성/특유의 버릇; source_session=2026-04-25_test_02",
-      "deck_ids": [],
-      "primary_deck_id": "",
+      "deck_ids": [
+        "D9"
+      ],
+      "primary_deck_id": "D9",
+      "import_notes": "",
       "review_state": {
         "word": "idiosyncrasy",
         "next_review_date": "2026-04-26",
@@ -2657,6 +2739,7 @@
       "evidence_hint": "core_meaning_ko=아주 작은; alt_meanings_ko=미세한/세밀한; source_session=2026-04-25_test_02",
       "deck_ids": [],
       "primary_deck_id": "",
+      "import_notes": "",
       "review_state": {
         "word": "minute",
         "next_review_date": "2026-04-28",
@@ -2692,6 +2775,7 @@
       "evidence_hint": "core_meaning_ko=현저하게; alt_meanings_ko=뚜렷하게/눈에 띄게; source_session=2026-04-25_test_02",
       "deck_ids": [],
       "primary_deck_id": "",
+      "import_notes": "",
       "review_state": {
         "word": "markedly",
         "next_review_date": "2026-04-26",
@@ -2741,16 +2825,22 @@
       "status": "active",
       "notes": "session_import",
       "entry_type": "word",
-      "deck_tags": [],
+      "deck_tags": [
+        "D9"
+      ],
       "source_files": [
-        "sessions/2026-04-25_test_02.txt"
+        "sessions/2026-04-25_test_02.txt",
+        "decks/D9_voca.txt"
       ],
       "accepted_paraphrases_ko": "퍼뜨리다; 전파하다; 보급하다; 유포하다",
       "grading_notes": "정보/지식/생각을 널리 퍼뜨린다는 의미가 핵심",
       "common_confusions_ko": "determine/designate와 형태 혼동 주의",
       "evidence_hint": "core_meaning_ko=퍼뜨리다; alt_meanings_ko=전파하다/보급하다/유포하다; source_session=2026-04-25_test_02",
-      "deck_ids": [],
-      "primary_deck_id": "",
+      "deck_ids": [
+        "D9"
+      ],
+      "primary_deck_id": "D9",
+      "import_notes": "",
       "review_state": {
         "word": "disseminate",
         "next_review_date": "2026-04-26",
@@ -2799,16 +2889,22 @@
       "status": "active",
       "notes": "session_import",
       "entry_type": "word",
-      "deck_tags": [],
+      "deck_tags": [
+        "D9"
+      ],
       "source_files": [
-        "sessions/2026-04-25_test_02.txt"
+        "sessions/2026-04-25_test_02.txt",
+        "decks/D9_voca.txt"
       ],
       "accepted_paraphrases_ko": "해로운; 손해를 끼치는; 불리한; 유해한",
       "grading_notes": "detrimental to 형태로 ~에 해로운 의미가 자주 쓰임",
       "common_confusions_ko": "beneficial=유익한의 반대; detriment=손해와 연결",
       "evidence_hint": "core_meaning_ko=해로운; alt_meanings_ko=손해를 끼치는/불리한; source_session=2026-04-25_test_02",
-      "deck_ids": [],
-      "primary_deck_id": "",
+      "deck_ids": [
+        "D9"
+      ],
+      "primary_deck_id": "D9",
+      "import_notes": "",
       "review_state": {
         "word": "detrimental",
         "next_review_date": "2026-04-26",
@@ -2845,6 +2941,586 @@
           "source_file": "sessions/2026-04-25_test_02.txt"
         }
       ]
+    },
+    {
+      "word": "culmination",
+      "pos": "",
+      "core_meaning_ko": "정점",
+      "alt_meanings_ko": "",
+      "example_en": "",
+      "example_ko": "",
+      "source_session": "deck_import",
+      "status": "active",
+      "notes": "deck_import",
+      "entry_type": "word",
+      "deck_tags": [
+        "D9"
+      ],
+      "source_files": [
+        "decks/D9_voca.txt"
+      ],
+      "accepted_paraphrases_ko": "",
+      "grading_notes": "",
+      "common_confusions_ko": "",
+      "evidence_hint": "",
+      "deck_ids": [
+        "D9"
+      ],
+      "primary_deck_id": "D9",
+      "import_notes": "",
+      "review_state": null,
+      "wrong_attempts": []
+    },
+    {
+      "word": "notable",
+      "pos": "",
+      "core_meaning_ko": "주목할 만한",
+      "alt_meanings_ko": "",
+      "example_en": "",
+      "example_ko": "",
+      "source_session": "deck_import",
+      "status": "active",
+      "notes": "deck_import",
+      "entry_type": "word",
+      "deck_tags": [
+        "D9"
+      ],
+      "source_files": [
+        "decks/D9_voca.txt"
+      ],
+      "accepted_paraphrases_ko": "",
+      "grading_notes": "",
+      "common_confusions_ko": "",
+      "evidence_hint": "",
+      "deck_ids": [
+        "D9"
+      ],
+      "primary_deck_id": "D9",
+      "import_notes": "",
+      "review_state": null,
+      "wrong_attempts": []
+    },
+    {
+      "word": "presume",
+      "pos": "",
+      "core_meaning_ko": "추정하다; 가정하다",
+      "alt_meanings_ko": "",
+      "example_en": "",
+      "example_ko": "",
+      "source_session": "deck_import",
+      "status": "active",
+      "notes": "deck_import",
+      "entry_type": "word",
+      "deck_tags": [
+        "D9"
+      ],
+      "source_files": [
+        "decks/D9_voca.txt"
+      ],
+      "accepted_paraphrases_ko": "",
+      "grading_notes": "",
+      "common_confusions_ko": "",
+      "evidence_hint": "",
+      "deck_ids": [
+        "D9"
+      ],
+      "primary_deck_id": "D9",
+      "import_notes": "",
+      "review_state": null,
+      "wrong_attempts": []
+    },
+    {
+      "word": "anarchy",
+      "pos": "",
+      "core_meaning_ko": "무질서",
+      "alt_meanings_ko": "",
+      "example_en": "",
+      "example_ko": "",
+      "source_session": "deck_import",
+      "status": "active",
+      "notes": "deck_import",
+      "entry_type": "word",
+      "deck_tags": [
+        "D9"
+      ],
+      "source_files": [
+        "decks/D9_voca.txt"
+      ],
+      "accepted_paraphrases_ko": "",
+      "grading_notes": "",
+      "common_confusions_ko": "",
+      "evidence_hint": "",
+      "deck_ids": [
+        "D9"
+      ],
+      "primary_deck_id": "D9",
+      "import_notes": "",
+      "review_state": null,
+      "wrong_attempts": []
+    },
+    {
+      "word": "sophisticated",
+      "pos": "",
+      "core_meaning_ko": "정교한",
+      "alt_meanings_ko": "",
+      "example_en": "",
+      "example_ko": "",
+      "source_session": "deck_import",
+      "status": "active",
+      "notes": "deck_import",
+      "entry_type": "word",
+      "deck_tags": [
+        "D9"
+      ],
+      "source_files": [
+        "decks/D9_voca.txt"
+      ],
+      "accepted_paraphrases_ko": "",
+      "grading_notes": "",
+      "common_confusions_ko": "",
+      "evidence_hint": "",
+      "deck_ids": [
+        "D9"
+      ],
+      "primary_deck_id": "D9",
+      "import_notes": "",
+      "review_state": null,
+      "wrong_attempts": []
+    },
+    {
+      "word": "sole",
+      "pos": "",
+      "core_meaning_ko": "유일한",
+      "alt_meanings_ko": "",
+      "example_en": "",
+      "example_ko": "",
+      "source_session": "deck_import",
+      "status": "active",
+      "notes": "deck_import",
+      "entry_type": "word",
+      "deck_tags": [
+        "D9"
+      ],
+      "source_files": [
+        "decks/D9_voca.txt"
+      ],
+      "accepted_paraphrases_ko": "",
+      "grading_notes": "",
+      "common_confusions_ko": "",
+      "evidence_hint": "",
+      "deck_ids": [
+        "D9"
+      ],
+      "primary_deck_id": "D9",
+      "import_notes": "",
+      "review_state": null,
+      "wrong_attempts": []
+    },
+    {
+      "word": "embellish",
+      "pos": "",
+      "core_meaning_ko": "장식하다",
+      "alt_meanings_ko": "",
+      "example_en": "",
+      "example_ko": "",
+      "source_session": "deck_import",
+      "status": "active",
+      "notes": "deck_import",
+      "entry_type": "word",
+      "deck_tags": [
+        "D9"
+      ],
+      "source_files": [
+        "decks/D9_voca.txt"
+      ],
+      "accepted_paraphrases_ko": "",
+      "grading_notes": "",
+      "common_confusions_ko": "",
+      "evidence_hint": "",
+      "deck_ids": [
+        "D9"
+      ],
+      "primary_deck_id": "D9",
+      "import_notes": "",
+      "review_state": null,
+      "wrong_attempts": []
+    },
+    {
+      "word": "antagonize",
+      "pos": "",
+      "core_meaning_ko": "~의 반감을 사다",
+      "alt_meanings_ko": "",
+      "example_en": "",
+      "example_ko": "",
+      "source_session": "deck_import",
+      "status": "active",
+      "notes": "deck_import",
+      "entry_type": "word",
+      "deck_tags": [
+        "D9"
+      ],
+      "source_files": [
+        "decks/D9_voca.txt"
+      ],
+      "accepted_paraphrases_ko": "",
+      "grading_notes": "",
+      "common_confusions_ko": "",
+      "evidence_hint": "",
+      "deck_ids": [
+        "D9"
+      ],
+      "primary_deck_id": "D9",
+      "import_notes": "",
+      "review_state": null,
+      "wrong_attempts": []
+    },
+    {
+      "word": "yearn",
+      "pos": "",
+      "core_meaning_ko": "갈망하다",
+      "alt_meanings_ko": "",
+      "example_en": "",
+      "example_ko": "",
+      "source_session": "deck_import",
+      "status": "active",
+      "notes": "deck_import",
+      "entry_type": "word",
+      "deck_tags": [
+        "D9"
+      ],
+      "source_files": [
+        "decks/D9_voca.txt"
+      ],
+      "accepted_paraphrases_ko": "",
+      "grading_notes": "",
+      "common_confusions_ko": "",
+      "evidence_hint": "",
+      "deck_ids": [
+        "D9"
+      ],
+      "primary_deck_id": "D9",
+      "import_notes": "",
+      "review_state": null,
+      "wrong_attempts": []
+    },
+    {
+      "word": "permit",
+      "pos": "",
+      "core_meaning_ko": "허락하다",
+      "alt_meanings_ko": "",
+      "example_en": "",
+      "example_ko": "",
+      "source_session": "deck_import",
+      "status": "active",
+      "notes": "deck_import",
+      "entry_type": "word",
+      "deck_tags": [
+        "D9"
+      ],
+      "source_files": [
+        "decks/D9_voca.txt"
+      ],
+      "accepted_paraphrases_ko": "",
+      "grading_notes": "",
+      "common_confusions_ko": "",
+      "evidence_hint": "",
+      "deck_ids": [
+        "D9"
+      ],
+      "primary_deck_id": "D9",
+      "import_notes": "",
+      "review_state": null,
+      "wrong_attempts": []
+    },
+    {
+      "word": "scarcity",
+      "pos": "",
+      "core_meaning_ko": "부족함",
+      "alt_meanings_ko": "",
+      "example_en": "",
+      "example_ko": "",
+      "source_session": "deck_import",
+      "status": "active",
+      "notes": "deck_import",
+      "entry_type": "word",
+      "deck_tags": [
+        "D9"
+      ],
+      "source_files": [
+        "decks/D9_voca.txt"
+      ],
+      "accepted_paraphrases_ko": "",
+      "grading_notes": "",
+      "common_confusions_ko": "",
+      "evidence_hint": "",
+      "deck_ids": [
+        "D9"
+      ],
+      "primary_deck_id": "D9",
+      "import_notes": "",
+      "review_state": null,
+      "wrong_attempts": []
+    },
+    {
+      "word": "renounce",
+      "pos": "",
+      "core_meaning_ko": "포기하다",
+      "alt_meanings_ko": "",
+      "example_en": "",
+      "example_ko": "",
+      "source_session": "deck_import",
+      "status": "active",
+      "notes": "deck_import",
+      "entry_type": "word",
+      "deck_tags": [
+        "D9"
+      ],
+      "source_files": [
+        "decks/D9_voca.txt"
+      ],
+      "accepted_paraphrases_ko": "",
+      "grading_notes": "",
+      "common_confusions_ko": "",
+      "evidence_hint": "",
+      "deck_ids": [
+        "D9"
+      ],
+      "primary_deck_id": "D9",
+      "import_notes": "",
+      "review_state": null,
+      "wrong_attempts": []
+    },
+    {
+      "word": "keep in check",
+      "pos": "",
+      "core_meaning_ko": "제어하다",
+      "alt_meanings_ko": "",
+      "example_en": "",
+      "example_ko": "",
+      "source_session": "deck_import",
+      "status": "active",
+      "notes": "deck_import",
+      "entry_type": "phrase",
+      "deck_tags": [
+        "D9"
+      ],
+      "source_files": [
+        "decks/D9_voca.txt"
+      ],
+      "accepted_paraphrases_ko": "",
+      "grading_notes": "",
+      "common_confusions_ko": "",
+      "evidence_hint": "",
+      "deck_ids": [
+        "D9"
+      ],
+      "primary_deck_id": "D9",
+      "import_notes": "",
+      "review_state": null,
+      "wrong_attempts": []
+    },
+    {
+      "word": "subsistence",
+      "pos": "",
+      "core_meaning_ko": "생존",
+      "alt_meanings_ko": "",
+      "example_en": "",
+      "example_ko": "",
+      "source_session": "deck_import",
+      "status": "active",
+      "notes": "deck_import",
+      "entry_type": "word",
+      "deck_tags": [
+        "D9"
+      ],
+      "source_files": [
+        "decks/D9_voca.txt"
+      ],
+      "accepted_paraphrases_ko": "",
+      "grading_notes": "",
+      "common_confusions_ko": "",
+      "evidence_hint": "",
+      "deck_ids": [
+        "D9"
+      ],
+      "primary_deck_id": "D9",
+      "import_notes": "",
+      "review_state": null,
+      "wrong_attempts": []
+    },
+    {
+      "word": "annually",
+      "pos": "",
+      "core_meaning_ko": "매년",
+      "alt_meanings_ko": "",
+      "example_en": "",
+      "example_ko": "",
+      "source_session": "deck_import",
+      "status": "active",
+      "notes": "deck_import",
+      "entry_type": "word",
+      "deck_tags": [
+        "D9"
+      ],
+      "source_files": [
+        "decks/D9_voca.txt"
+      ],
+      "accepted_paraphrases_ko": "",
+      "grading_notes": "",
+      "common_confusions_ko": "",
+      "evidence_hint": "",
+      "deck_ids": [
+        "D9"
+      ],
+      "primary_deck_id": "D9",
+      "import_notes": "",
+      "review_state": null,
+      "wrong_attempts": []
+    },
+    {
+      "word": "emerge",
+      "pos": "",
+      "core_meaning_ko": "나타나다",
+      "alt_meanings_ko": "",
+      "example_en": "",
+      "example_ko": "",
+      "source_session": "deck_import",
+      "status": "active",
+      "notes": "deck_import",
+      "entry_type": "word",
+      "deck_tags": [
+        "D9"
+      ],
+      "source_files": [
+        "decks/D9_voca.txt"
+      ],
+      "accepted_paraphrases_ko": "",
+      "grading_notes": "",
+      "common_confusions_ko": "",
+      "evidence_hint": "",
+      "deck_ids": [
+        "D9"
+      ],
+      "primary_deck_id": "D9",
+      "import_notes": "",
+      "review_state": null,
+      "wrong_attempts": []
+    },
+    {
+      "word": "customary",
+      "pos": "",
+      "core_meaning_ko": "습관적인",
+      "alt_meanings_ko": "",
+      "example_en": "",
+      "example_ko": "",
+      "source_session": "deck_import",
+      "status": "active",
+      "notes": "deck_import",
+      "entry_type": "word",
+      "deck_tags": [
+        "D9"
+      ],
+      "source_files": [
+        "decks/D9_voca.txt"
+      ],
+      "accepted_paraphrases_ko": "",
+      "grading_notes": "",
+      "common_confusions_ko": "",
+      "evidence_hint": "",
+      "deck_ids": [
+        "D9"
+      ],
+      "primary_deck_id": "D9",
+      "import_notes": "",
+      "review_state": null,
+      "wrong_attempts": []
+    },
+    {
+      "word": "assign",
+      "pos": "",
+      "core_meaning_ko": "지정하다",
+      "alt_meanings_ko": "",
+      "example_en": "",
+      "example_ko": "",
+      "source_session": "deck_import",
+      "status": "active",
+      "notes": "deck_import",
+      "entry_type": "word",
+      "deck_tags": [
+        "D9"
+      ],
+      "source_files": [
+        "decks/D9_voca.txt"
+      ],
+      "accepted_paraphrases_ko": "",
+      "grading_notes": "",
+      "common_confusions_ko": "",
+      "evidence_hint": "",
+      "deck_ids": [
+        "D9"
+      ],
+      "primary_deck_id": "D9",
+      "import_notes": "",
+      "review_state": null,
+      "wrong_attempts": []
+    },
+    {
+      "word": "equivocal",
+      "pos": "",
+      "core_meaning_ko": "모호한",
+      "alt_meanings_ko": "",
+      "example_en": "",
+      "example_ko": "",
+      "source_session": "deck_import",
+      "status": "active",
+      "notes": "deck_import",
+      "entry_type": "word",
+      "deck_tags": [
+        "D9"
+      ],
+      "source_files": [
+        "decks/D9_voca.txt"
+      ],
+      "accepted_paraphrases_ko": "",
+      "grading_notes": "",
+      "common_confusions_ko": "",
+      "evidence_hint": "",
+      "deck_ids": [
+        "D9"
+      ],
+      "primary_deck_id": "D9",
+      "import_notes": "",
+      "review_state": null,
+      "wrong_attempts": []
+    },
+    {
+      "word": "essentially",
+      "pos": "",
+      "core_meaning_ko": "기본적으로",
+      "alt_meanings_ko": "",
+      "example_en": "",
+      "example_ko": "",
+      "source_session": "deck_import",
+      "status": "active",
+      "notes": "deck_import",
+      "entry_type": "word",
+      "deck_tags": [
+        "D9"
+      ],
+      "source_files": [
+        "decks/D9_voca.txt"
+      ],
+      "accepted_paraphrases_ko": "",
+      "grading_notes": "",
+      "common_confusions_ko": "",
+      "evidence_hint": "",
+      "deck_ids": [
+        "D9"
+      ],
+      "primary_deck_id": "D9",
+      "import_notes": "",
+      "review_state": null,
+      "wrong_attempts": []
     }
   ],
   "confusion_pairs": [

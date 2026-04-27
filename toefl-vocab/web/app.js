@@ -26,13 +26,16 @@
     route: { name: "today", params: {} },
     quiz: null,
     lastQuizSummary: null,
+    lastQuizAnswerSheet: null,
     customQuizCount: 10,
     selectedDeckId: "all",
     deckQuizCount: 10,
+    favoriteQuizCount: 10,
     lastGeneratedQuizWords: [],
     statsSort: "recommended",
     statsSearch: "",
     statsDeckId: "all",
+    statsFavoritesOnly: false,
     answerDraft: "",
     lastResult: null,
     serviceWorkerStatus: "unavailable"
@@ -296,7 +299,8 @@
       seedGeneratedAt: seed.generated_at || "",
       reviewStates,
       attempts,
-      importedAttemptIds
+      importedAttemptIds,
+      favorites: {}
     };
   }
 
@@ -307,7 +311,8 @@
       seedGeneratedAt: progress.seedGeneratedAt || "",
       reviewStates: progress.reviewStates || {},
       attempts: Array.isArray(progress.attempts) ? progress.attempts : [],
-      importedAttemptIds: progress.importedAttemptIds || {}
+      importedAttemptIds: progress.importedAttemptIds || {},
+      favorites: progress.favorites && typeof progress.favorites === "object" ? progress.favorites : {}
     };
     const seedWordsByWord = new Map();
 
@@ -422,6 +427,59 @@
     localStorage.setItem(STORAGE_KEY, JSON.stringify(app.progress));
   }
 
+  function normalizeFavoriteWord(word) {
+    return String(word || "").trim();
+  }
+
+  function isFavoriteWord(word) {
+    const normalized = normalizeFavoriteWord(word);
+    return Boolean(normalized && app.progress && app.progress.favorites && app.progress.favorites[normalized]);
+  }
+
+  function toggleFavoriteWord(word) {
+    const normalized = normalizeFavoriteWord(word);
+    if (!normalized) {
+      showToast("즐겨찾기할 단어를 찾을 수 없습니다.");
+      return;
+    }
+
+    if (!app.progress) {
+      app.progress = buildInitialProgress(app.seed || { words: app.words });
+    }
+    if (!app.progress.favorites || typeof app.progress.favorites !== "object") {
+      app.progress.favorites = {};
+    }
+
+    const exists = Boolean(app.progress.favorites[normalized]);
+    if (exists) {
+      delete app.progress.favorites[normalized];
+    } else {
+      app.progress.favorites[normalized] = {
+        word: normalized,
+        createdAt: new Date().toISOString(),
+        source: "user"
+      };
+    }
+
+    saveProgress();
+    render();
+    showToast(exists ? "즐겨찾기에서 제거했습니다." : "즐겨찾기에 추가했습니다.");
+  }
+
+  function getFavoriteWords() {
+    return app.words.filter((entry) => isFavoriteWord(entry.word));
+  }
+
+  function getFavoriteCount() {
+    return getFavoriteWords().length;
+  }
+
+  function favoriteButton(word, options = {}) {
+    const favorite = isFavoriteWord(word);
+    const className = options.className || "secondary-button";
+    return button(favorite ? "★ 즐겨찾기 해제" : "☆ 즐겨찾기", className, () => toggleFavoriteWord(word));
+  }
+
   function routeFromHash() {
     const hash = decodeURIComponent(window.location.hash.replace(/^#/, ""));
     if (!hash) {
@@ -468,6 +526,12 @@
       case "summary":
         renderQuizSummary();
         break;
+      case "answer-sheet":
+        renderAnswerSheet();
+        break;
+      case "favorites":
+        renderFavorites();
+        break;
       case "wrong":
         renderWrongAnswers();
         break;
@@ -498,6 +562,8 @@
       quiz: "Quiz",
       result: "Result",
       summary: "퀴즈 요약",
+      "answer-sheet": "답안지",
+      favorites: "즐겨찾기",
       wrong: "Wrong Answers",
       stats: "단어별 통계",
       word: "Word Detail",
@@ -533,7 +599,7 @@
           metric(todayString(), "Today")
         ]),
         el("div", { className: "button-row" }, [
-          button("퀴즈 시작", "primary-button", () => startQuiz(due), due.length === 0),
+          button("퀴즈 시작", "primary-button", () => startQuiz(due, false, { scopeType: "today", scopeLabel: "오늘 복습" }), due.length === 0),
           button("전체 단어 보기", "secondary-button", renderAllWordsToast)
         ])
       ])
@@ -549,8 +615,8 @@
           stat(formatPercent(desiredRetention), "목표 기억률")
         ]),
         el("div", { className: "button-row" }, [
-          button("위험 단어 퀴즈", "secondary-button", () => startQuiz(riskStats.map((stats) => stats.entry)), riskStats.length === 0),
-          button("초기 학습 단어 퀴즈", "secondary-button", () => startQuiz(learningStats.map((stats) => stats.entry)), learningStats.length === 0)
+          button("위험 단어 퀴즈", "secondary-button", () => startQuiz(riskStats.map((stats) => stats.entry), false, { scopeType: "risk", scopeLabel: "위험 단어" }), riskStats.length === 0),
+          button("초기 학습 단어 퀴즈", "secondary-button", () => startQuiz(learningStats.map((stats) => stats.entry), false, { scopeType: "learning", scopeLabel: "초기 학습 단어" }), learningStats.length === 0)
         ])
       ])
     );
@@ -580,13 +646,14 @@
             const words = sampleWeightedWords(count);
             app.lastGeneratedQuizWords = words;
             showToast(`${words.length}개 단어로 맞춤 퀴즈를 만들었습니다.`);
-            startQuiz(words);
+            startQuiz(words, false, { scopeType: "weighted", scopeLabel: "맞춤 가중치 퀴즈" });
           }, app.words.length === 0),
           button("단어별 통계 보기", "secondary-button", () => navigate("stats"))
         ])
       ])
     );
 
+    renderFavoriteLearningSection();
     renderDeckLearningSection();
 
     const section = el("section", { className: "section" }, [el("h2", {}, "복습 목록")]);
@@ -596,6 +663,27 @@
       section.append(wordList(due));
     }
     screen.append(section);
+  }
+
+  function renderFavoriteLearningSection() {
+    const favoriteWords = getFavoriteWords();
+    const favoriteCount = favoriteWords.length;
+
+    screen.append(
+      el("section", { className: "section" }, [
+        el("h2", {}, "즐겨찾기"),
+        el("p", { className: "row-subtitle" }, "중요한 단어를 따로 모아 복습할 수 있습니다."),
+        el("div", { className: "stat-grid" }, [
+          stat(String(favoriteCount), "즐겨찾기 단어"),
+          stat(String(favoriteWords.filter((entry) => getWordAttempts(entry.word).some(isMissAttempt)).length), "Weak")
+        ]),
+        el("div", { className: "button-row" }, [
+          button("즐겨찾기 보기", "secondary-button", () => navigate("favorites")),
+          button("즐겨찾기 퀴즈", "primary-button", () => startFavoriteQuiz(), favoriteCount === 0),
+          button("즐겨찾기 가중치 퀴즈", "secondary-button", () => startFavoriteQuiz({ weighted: true }), favoriteCount === 0)
+        ])
+      ])
+    );
   }
 
   function renderDeckLearningSection() {
@@ -669,6 +757,73 @@
     );
   }
 
+  function renderFavorites() {
+    const favoriteWords = getFavoriteWords();
+    const favoriteStats = favoriteWords.map(computeWordStats);
+    const dueCount = favoriteStats.filter((stats) => stats.isDue).length;
+    const weakCount = favoriteStats.filter((stats) => stats.missCount > 0).length;
+    const favoriteQuizCount = clampFavoriteQuizCount(app.favoriteQuizCount);
+    if (favoriteQuizCount > 0) {
+      app.favoriteQuizCount = favoriteQuizCount;
+    }
+
+    const countInput = el("input", {
+      className: "number-input",
+      type: "number",
+      min: "1",
+      max: String(Math.max(1, favoriteWords.length)),
+      value: String(favoriteQuizCount || 1),
+      inputMode: "numeric",
+      oninput: (event) => {
+        app.favoriteQuizCount = clampFavoriteQuizCount(event.target.value);
+      }
+    });
+
+    screen.append(
+      el("section", { className: "detail-panel" }, [
+        el("p", { className: "quiz-pos" }, "Favorites"),
+        el("h2", { className: "quiz-word" }, "즐겨찾기"),
+        el("div", { className: "stat-grid" }, [
+          stat(String(favoriteWords.length), "단어 수"),
+          stat(String(dueCount), "Due"),
+          stat(String(weakCount), "Weak"),
+          stat(String(favoriteStats.reduce((sum, stats) => sum + stats.totalAttempts, 0)), "시도")
+        ]),
+        el("label", { className: "form-row" }, [
+          el("span", {}, "퀴즈 단어 수"),
+          countInput
+        ]),
+        el("div", { className: "button-row" }, [
+          button("즐겨찾기 퀴즈 시작", "primary-button", () => {
+            const count = clampFavoriteQuizCount(countInput.value);
+            app.favoriteQuizCount = count;
+            startFavoriteQuiz({ count, weighted: false });
+          }, favoriteWords.length === 0),
+          button("즐겨찾기 가중치 퀴즈", "secondary-button", () => {
+            const count = clampFavoriteQuizCount(countInput.value);
+            app.favoriteQuizCount = count;
+            startFavoriteQuiz({ count, weighted: true });
+          }, favoriteWords.length === 0),
+          button("Today", "secondary-button", () => navigate("today"))
+        ])
+      ])
+    );
+
+    const section = el("section", { className: "section" }, [el("h2", {}, "즐겨찾기 단어")]);
+    if (favoriteWords.length === 0) {
+      section.append(emptyState("아직 즐겨찾기 단어가 없습니다."));
+      section.append(
+        el("div", { className: "button-row" }, [
+          button("Today로 이동", "primary-button", () => navigate("today")),
+          button("단어별 통계 보기", "secondary-button", () => navigate("stats"))
+        ])
+      );
+    } else {
+      section.append(deckWordList(favoriteWords));
+    }
+    screen.append(section);
+  }
+
   function renderQuiz() {
     if (!app.quiz) {
       startQuiz(getDueWords(), true);
@@ -697,6 +852,9 @@
       value: app.answerDraft,
       oninput: (event) => {
         app.answerDraft = event.target.value;
+      },
+      onkeydown: (event) => {
+        handleQuizAnswerKeydown(event, entry);
       }
     });
 
@@ -718,6 +876,7 @@
     body.push(
       el("label", { className: "answer-label", for: "answer-box" }, "답안"),
       textarea,
+      el("p", { className: "input-hint" }, "Enter로 채점 · Shift+Enter로 줄바꿈"),
       el("div", { className: "button-row" }, [
         button("채점", "primary-button", () => submitAnswer(entry)),
         button("미응답 제출", "secondary-button", () => {
@@ -730,6 +889,17 @@
     textarea.id = "answer-box";
     screen.append(el("section", { className: "quiz-card" }, body));
     setTimeout(() => textarea.focus(), 50);
+  }
+
+  function handleQuizAnswerKeydown(event, entry) {
+    if (event.key !== "Enter") return;
+    if (event.shiftKey) return;
+    if (event.isComposing || event.keyCode === 229) return;
+    if (event.repeat) return;
+
+    event.preventDefault();
+    app.answerDraft = event.target.value;
+    submitAnswer(entry);
   }
 
   function renderResult() {
@@ -813,8 +983,44 @@
           ["미응답", String(summary.blankCount)]
         ]),
         el("div", { className: "button-row" }, [
-          button("Today로 이동", "primary-button", () => navigate("today")),
+          button("답안지 보기", "primary-button", () => navigate("answer-sheet")),
+          button("Today로 이동", "secondary-button", () => navigate("today")),
           button("오답 보기", "secondary-button", () => navigate("wrong"))
+        ])
+      ])
+    );
+  }
+
+  function renderAnswerSheet() {
+    const text = getCurrentQuizAnswerSheet();
+    if (!text) {
+      screen.append(
+        el("section", { className: "empty-state" }, [
+          el("p", {}, "표시할 답안지가 없습니다. 퀴즈를 완료한 뒤 다시 시도해 주세요."),
+          el("div", { className: "button-row" }, [
+            button("Today로 이동", "primary-button", () => navigate("today"))
+          ])
+        ])
+      );
+      return;
+    }
+
+    const textarea = el("textarea", {
+      className: "answer-sheet-box textarea-readonly",
+      readonly: true,
+      rows: "18",
+      value: text
+    });
+
+    screen.append(
+      el("section", { className: "result-panel" }, [
+        el("h2", {}, "퀴즈 답안지"),
+        el("p", { className: "row-subtitle" }, "아래 텍스트를 복사해서 노트나 문서에 붙여넣을 수 있습니다."),
+        textarea,
+        el("div", { className: "button-row" }, [
+          button("클립보드 복사", "primary-button", () => copyTextToClipboard(text)),
+          button("텍스트 파일 다운로드", "secondary-button", () => downloadTextFile(`toefl-vocab-answer-sheet-${safeFilenameDate()}.txt`, text)),
+          button("Today", "secondary-button", () => navigate("today"))
         ])
       ])
     );
@@ -887,7 +1093,8 @@
         stat(String(learningWords), "학습 단계"),
         stat(formatDays(averageStability), "기억 안정도"),
         stat(formatDecimal(averageDifficulty, 2), "난이도"),
-        stat(String(totalLapses), "실패 누적")
+        stat(String(totalLapses), "실패 누적"),
+        stat(String(getFavoriteCount()), "즐겨찾기")
       ])
     );
 
@@ -931,6 +1138,17 @@
         el("option", { value: deck.deck_id, selected: selectedDeckId === deck.deck_id }, deck.display_name || deck.deck_id)
       ))
     ]);
+    const favoriteToggle = el("label", { className: "checkbox-row" }, [
+      el("input", {
+        type: "checkbox",
+        checked: Boolean(app.statsFavoritesOnly),
+        onchange: (event) => {
+          app.statsFavoritesOnly = Boolean(event.target.checked);
+          renderStatsRows();
+        }
+      }),
+      el("span", {}, "즐겨찾기만")
+    ]);
     const listHost = el("div", { className: "list" });
 
     screen.append(
@@ -939,7 +1157,8 @@
         el("div", { className: "stats-controls" }, [
           deckSelect,
           sortSelect,
-          searchInput
+          searchInput,
+          favoriteToggle
         ]),
         listHost
       ])
@@ -948,7 +1167,10 @@
     renderStatsRows();
 
     function renderStatsRows() {
-      const filtered = filterWordStats(allStats, app.statsSearch);
+      const favoriteFiltered = app.statsFavoritesOnly
+        ? allStats.filter((stats) => isFavoriteWord(stats.word))
+        : allStats;
+      const filtered = filterWordStats(favoriteFiltered, app.statsSearch);
       const sorted = sortWordStats(filtered, app.statsSort);
       listHost.replaceChildren();
 
@@ -962,6 +1184,7 @@
           el("button", { className: "row", type: "button", onclick: () => navigate("word", { word: stats.word }) }, [
             el("div", { className: "row-main" }, [
               el("p", { className: "row-title" }, [
+                isFavoriteWord(stats.word) ? el("span", { className: "favorite-star", title: "즐겨찾기" }, "★") : null,
                 el("span", {}, stats.word),
                 el("span", { className: "score-pill" }, `점수 ${formatScore(stats.weightedScore)}`)
               ]),
@@ -1065,6 +1288,7 @@
           ["허용 paraphrase", entry.accepted_paraphrases_ko || "없음"],
           ["예문", [entry.example_en, entry.example_ko].filter(Boolean).join("\n") || "없음"],
           ["채점 메모", [entry.grading_notes, entry.common_confusions_ko, entry.evidence_hint].filter(Boolean).join("\n") || "없음"],
+          ["즐겨찾기", isFavoriteWord(entry.word) ? "예" : "아니오"],
           ["Deck", deckIds.length ? deckIds.join(", ") : "없음"],
           ["Primary Deck", entry.primary_deck_id || "없음"],
           ["복습 상태", `next=${review.next_review_date}, interval=${review.interval_days}, priority=${review.priority}, wrong=${review.total_wrong}`],
@@ -1088,7 +1312,8 @@
           ["가중치 점수", formatScore(stats.weightedScore)]
         ]),
         el("div", { className: "button-row" }, [
-          button("이 단어 퀴즈", "primary-button", () => startQuiz([entry])),
+          favoriteButton(entry.word),
+          button("이 단어 퀴즈", "primary-button", () => startQuiz([entry], false, { scopeType: "word", scopeLabel: entry.word })),
           button("Today", "secondary-button", () => navigate("today"))
         ])
       ])
@@ -1131,6 +1356,7 @@
           ["seed source_hash", sourceHash],
           ["words", String(app.words.length)],
           ["attempts", String(attempts.length)],
+          ["favorites", String(getFavoriteCount())],
           ["storage", `${Math.round(storageBytes / 1024)} KB`],
           ["service worker", app.serviceWorkerStatus]
         ]),
@@ -1189,7 +1415,7 @@
     );
   }
 
-  function startQuiz(words, silent = false) {
+  function startQuiz(words, silent = false, options = {}) {
     const quizWords = (words && words.length ? words : getDueWords()).slice();
     app.quiz = {
       words: quizWords,
@@ -1198,9 +1424,13 @@
       startedAtMs: Date.now(),
       completedAt: "",
       completedAtMs: null,
+      scopeType: options.scopeType || "",
+      scopeLabel: options.scopeLabel || "",
+      deckId: options.deckId || "",
       results: []
     };
     app.lastQuizSummary = null;
+    app.lastQuizAnswerSheet = null;
     app.answerDraft = "";
     app.lastResult = null;
     if (!silent) {
@@ -1243,10 +1473,21 @@
     app.progress.attempts.push(attempt);
     if (app.quiz) {
       app.quiz.results[app.quiz.index] = {
+        index: app.quiz.index + 1,
         word: entry.word,
+        user_answer: result.user_answer,
+        canonical_meaning: result.canonical_meaning,
         verdict: result.verdict,
+        reason_ko: result.reason_ko,
+        evidence_ko: result.evidence_ko,
+        accepted_range_ko: result.accepted_range_ko,
+        correction_ko: result.correction_ko,
+        error_types: Array.isArray(result.error_types) ? result.error_types.slice() : [],
+        confidence: result.confidence,
         timestamp: attempt.timestamp,
         recall_effort: attempt.recall_effort,
+        next_review_date: attempt.scheduled_next_review_date,
+        interval_days: attempt.scheduled_interval_days,
         scheduled_next_review_date: attempt.scheduled_next_review_date,
         scheduled_interval_days: attempt.scheduled_interval_days,
         stability_days: attempt.stability_days,
@@ -1276,6 +1517,7 @@
 
     if (app.quiz.index >= app.quiz.words.length) {
       app.lastQuizSummary = buildQuizSummary(app.quiz);
+      app.lastQuizAnswerSheet = buildQuizAnswerSheet(app.lastQuizSummary);
       app.quiz = null;
       navigate("summary");
     } else {
@@ -1304,14 +1546,132 @@
       startedAt: quiz && quiz.startedAt ? quiz.startedAt : "",
       completedAt: quiz && quiz.completedAt ? quiz.completedAt : "",
       elapsedMs,
+      scopeType: quiz && quiz.scopeType ? quiz.scopeType : "",
+      scopeLabel: quiz && quiz.scopeLabel ? quiz.scopeLabel : "",
+      deckId: quiz && quiz.deckId ? quiz.deckId : "",
       totalAttempted,
       correctCount,
       partialCount,
       wrongCount,
       blankCount,
       accuracyPercent: totalAttempted > 0 ? Math.round((correctCount / totalAttempted) * 100) : 0,
+      results,
       words: results
     };
+  }
+
+  function buildQuizAnswerSheet(summary, options = {}) {
+    const source = summary || {};
+    const results = Array.isArray(source.results)
+      ? source.results
+      : Array.isArray(source.words)
+        ? source.words
+        : [];
+    const lines = [];
+    const completedAt = source.completedAt || new Date().toISOString();
+    const dateText = String(completedAt).slice(0, 10) || todayString();
+
+    lines.push("TOEFL Vocab Quiz Answer Sheet");
+    lines.push(`Date: ${dateText}`);
+    if (source.scopeLabel || options.scopeLabel) {
+      lines.push(`Scope: ${source.scopeLabel || options.scopeLabel}`);
+    }
+    lines.push(`Total: ${source.totalAttempted || results.length || 0}`);
+    lines.push(`Correct: ${source.correctCount || 0}`);
+    lines.push(`Partial: ${source.partialCount || 0}`);
+    lines.push(`Wrong: ${source.wrongCount || 0}`);
+    lines.push(`Blank: ${source.blankCount || 0}`);
+    lines.push(`Accuracy: ${Number(source.accuracyPercent || 0)}%`);
+    lines.push(`Elapsed: ${formatElapsedTime(Number(source.elapsedMs || 0))}`);
+    lines.push("");
+
+    results.forEach((result, index) => {
+      const itemNumber = Number(result.index || index + 1);
+      const nextReview = result.next_review_date || result.scheduled_next_review_date || "";
+      const intervalDays = result.interval_days ?? result.scheduled_interval_days;
+      const nextReviewText = [
+        nextReview || "없음",
+        Number.isFinite(Number(intervalDays)) ? `${intervalDays}일 간격` : ""
+      ].filter(Boolean).join(" · ");
+      const errorTypes = Array.isArray(result.error_types) && result.error_types.length
+        ? result.error_types.join(", ")
+        : "없음";
+
+      lines.push(`${itemNumber}. ${result.word || ""}`);
+      lines.push(`- 제출 답안: ${result.user_answer || "미응답"}`);
+      lines.push(`- 기준 의미: ${result.canonical_meaning || "없음"}`);
+      lines.push(`- 판정: ${result.verdict || "없음"}`);
+      lines.push(`- 회상 난이도: ${formatRecallEffort(result.recall_effort)}`);
+      lines.push(`- 허용 범위: ${result.accepted_range_ko || "없음"}`);
+      lines.push(`- 교정 답안: ${result.correction_ko || "없음"}`);
+      lines.push(`- 다음 복습: ${nextReviewText}`);
+      lines.push(`- 오류 유형: ${errorTypes}`);
+      if (result.reason_ko) {
+        lines.push(`- 판정 이유: ${result.reason_ko}`);
+      }
+      lines.push("");
+    });
+
+    return lines.join("\n").trimEnd() + "\n";
+  }
+
+  function getCurrentQuizAnswerSheet() {
+    if (app.lastQuizAnswerSheet) {
+      return app.lastQuizAnswerSheet;
+    }
+    if (app.lastQuizSummary) {
+      return buildQuizAnswerSheet(app.lastQuizSummary);
+    }
+    return "";
+  }
+
+  async function copyTextToClipboard(text) {
+    try {
+      if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+        await navigator.clipboard.writeText(text);
+      } else {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.setAttribute("readonly", "");
+        textarea.style.position = "fixed";
+        textarea.style.left = "-9999px";
+        document.body.append(textarea);
+        textarea.select();
+        const copied = document.execCommand("copy");
+        textarea.remove();
+        if (!copied) {
+          throw new Error("copy command failed");
+        }
+      }
+      showToast("클립보드에 복사했습니다.");
+    } catch (error) {
+      showToast(`복사 실패: ${error.message}`);
+    }
+  }
+
+  function downloadTextFile(filename, text) {
+    const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  function safeFilenameDate() {
+    return new Date().toISOString().slice(0, 19).replace(/[:T]/g, "-");
+  }
+
+  function formatRecallEffort(effort) {
+    const value = String(effort || "");
+    if (value === "easy") return "쉬웠음";
+    if (value === "good") return "보통";
+    if (value === "hard") return "어려웠음";
+    if (value === "again") return "다시";
+    return "없음";
   }
 
   function formatElapsedTime(ms) {
@@ -1729,6 +2089,30 @@
     return clampCountForTotal(value, getWordsForDeck(deckId).length);
   }
 
+  function clampFavoriteQuizCount(value) {
+    return clampCountForTotal(value, getFavoriteWords().length);
+  }
+
+  function startFavoriteQuiz(options = {}) {
+    const favoriteWords = getFavoriteWords();
+    if (favoriteWords.length === 0) {
+      showToast("즐겨찾기 단어가 없습니다.");
+      return;
+    }
+
+    const count = clampFavoriteQuizCount(options.count || app.favoriteQuizCount);
+    app.favoriteQuizCount = count;
+    const quizWords = options.weighted
+      ? sampleWeightedWords(count, { candidates: favoriteWords })
+      : shuffleWords(favoriteWords).slice(0, count);
+    app.lastGeneratedQuizWords = quizWords;
+    showToast(`즐겨찾기에서 ${quizWords.length}개 단어로 퀴즈를 만들었습니다.`);
+    startQuiz(quizWords, false, {
+      scopeType: "favorites",
+      scopeLabel: options.weighted ? "즐겨찾기 가중치 퀴즈" : "즐겨찾기 퀴즈"
+    });
+  }
+
   function startDeckQuiz(deckId, options = {}) {
     const normalized = normalizeDeckId(deckId || "all");
     const deckWords = getWordsForDeck(normalized);
@@ -1743,7 +2127,11 @@
       : shuffleWords(deckWords).slice(0, count);
     app.lastGeneratedQuizWords = quizWords;
     showToast(`${getDeckLabel(normalized)}에서 ${quizWords.length}개 단어로 퀴즈를 만들었습니다.`);
-    startQuiz(quizWords);
+    startQuiz(quizWords, false, {
+      scopeType: "deck",
+      scopeLabel: `${getDeckLabel(normalized)}${options.weighted ? " 가중치" : ""}`,
+      deckId: normalized
+    });
   }
 
   function shuffleWords(words) {
@@ -2147,6 +2535,7 @@
         el("button", { className: "row", type: "button", onclick: () => navigate("word", { word: word.word }) }, [
           el("div", { className: "row-main" }, [
             el("p", { className: "row-title" }, [
+              isFavoriteWord(word.word) ? el("span", { className: "favorite-star", title: "즐겨찾기" }, "★") : null,
               el("span", {}, word.word),
               word.entry_type === "phrase" ? el("span", { className: "pill" }, "phrase") : null
             ]),
@@ -2167,6 +2556,7 @@
         el("button", { className: "row", type: "button", onclick: () => navigate("word", { word: word.word }) }, [
           el("div", { className: "row-main" }, [
             el("p", { className: "row-title" }, [
+              isFavoriteWord(word.word) ? el("span", { className: "favorite-star", title: "즐겨찾기" }, "★") : null,
               el("span", {}, word.word),
               word.entry_type === "phrase" ? el("span", { className: "pill" }, "phrase") : null
             ]),
@@ -2227,6 +2617,7 @@
       else if (key === "text") node.textContent = value;
       else if (key === "onclick") node.addEventListener("click", value);
       else if (key === "oninput") node.addEventListener("input", value);
+      else if (key === "onkeydown") node.addEventListener("keydown", value);
       else if (key in node) node[key] = value;
       else node.setAttribute(key, value);
     });
@@ -2264,6 +2655,7 @@
     app.progress = buildInitialProgress(app.seed);
     app.quiz = null;
     app.lastQuizSummary = null;
+    app.lastQuizAnswerSheet = null;
     app.lastResult = null;
     saveProgress();
     showToast("초기화했습니다.");
@@ -2363,6 +2755,7 @@
     app.progress = reconcileProgress(importedProgress, app.seed);
     app.quiz = null;
     app.lastQuizSummary = null;
+    app.lastQuizAnswerSheet = null;
     app.answerDraft = "";
     app.lastResult = null;
     saveProgress();

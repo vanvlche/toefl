@@ -1,33 +1,28 @@
-palatial
-potent
-intricate
-eclectic
-turmoil
-
-preeminent
-recompense
-crude
-proliferate
-assess
-
-scrutiny
-acute
-inadvertently
-peril
-arduous
-
-materialize
-demise
-deem
-profuse
-ornament
-
-demolish
-voracious
-reform
-inclination
-constituent
-
-insolent
-arduous
-be accompanied by
+word	meaning
+palatial	궁전 같은
+potent	강력한
+intricate	복잡하게 얽힌
+eclectic	절충적인
+turmoil	혼란
+preeminent	탁월한
+recompense	보상하다
+crude	조잡한
+proliferate	급증하다
+assess	평가하다
+scrutiny	면밀한 조사
+acute	심각한
+inadvertently	무심코
+peril	위험
+arduous	고된
+materialize	실현되다
+demise	죽음
+deem	간주하다
+profuse	풍부한
+ornament	장식물
+demolish	파괴하다
+voracious	게걸스러운
+reform	개혁하다
+inclination	성향
+constituent	구성 요소
+insolent	건방진
+be accompanied by	동반되다

@@ -188,6 +188,13 @@ h3 {
   font-weight: 750;
 }
 
+.favorite-star {
+  color: #b45f06;
+  font-size: 15px;
+  line-height: 1;
+  flex: 0 0 auto;
+}
+
 .row-subtitle {
   margin: 0;
   color: var(--muted);
@@ -263,6 +270,22 @@ h3 {
 .search-input:focus {
   border-color: var(--brand-2);
   outline: 3px solid rgba(46, 111, 105, 0.18);
+}
+
+.checkbox-row {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.checkbox-row input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--brand-2);
 }
 
 .stats-controls {
@@ -424,9 +447,38 @@ h3 {
   line-height: 1.45;
 }
 
+.answer-sheet-box {
+  display: block;
+  width: 100%;
+  min-height: 320px;
+  margin-top: 14px;
+  resize: vertical;
+  padding: 12px;
+  border: 1px solid #cbd5d0;
+  border-radius: var(--radius);
+  background: #fff;
+  color: var(--ink);
+  font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  white-space: pre;
+  overflow: auto;
+}
+
+.textarea-readonly {
+  background: #fbfcfb;
+}
+
 .answer-box:focus {
   border-color: var(--brand-2);
   outline: 3px solid rgba(46, 111, 105, 0.18);
+}
+
+.input-hint {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.35;
 }
 
 .field-list {

@@ -91,6 +91,24 @@ Today 화면의 `Deck별 학습` 섹션에서 Deck을 선택할 수 있습니다
 
 Deck UI가 보이지 않으면 먼저 `python3 scripts/import_decks.py --apply` 후 `python3 scripts/export_web_seed.py`를 실행했는지 확인합니다.
 
+## 즐겨찾기
+
+Word Detail 화면에서 `☆ 즐겨찾기` 버튼으로 단어를 추가하고, `★ 즐겨찾기 해제`로 제거할 수 있습니다.
+
+Today 화면의 `즐겨찾기` 섹션에서 즐겨찾기 단어 수를 확인하고, 즐겨찾기 단어만으로 일반 퀴즈나 가중치 퀴즈를 시작할 수 있습니다.
+
+`#favorites` 화면에서는 현재 seed에 존재하는 즐겨찾기 단어만 목록으로 보여 줍니다. 단어 행을 누르면 Word Detail로 이동합니다.
+
+즐겨찾기는 브라우저 `localStorage`의 progress 데이터에 저장되며, 진행 상황 export/import에 포함됩니다. 설정에서 progress를 seed 기준으로 초기화하면 즐겨찾기도 함께 삭제될 수 있습니다.
+
+## 퀴즈 답안지
+
+퀴즈 완료 후 `퀴즈 요약` 화면에서 `답안지 보기`를 누르면 `#answer-sheet` 화면이 열립니다.
+
+답안지는 plain text textarea로 표시되어 노트나 문서에 붙여넣기 쉽습니다. 내용에는 제출 답안, 기준 의미, 판정, 허용 범위, 교정 답안, 오류 유형, 다음 복습일, 퀴즈 요약 통계가 포함됩니다.
+
+`클립보드 복사` 버튼으로 전체 텍스트를 복사할 수 있고, `텍스트 파일 다운로드` 버튼으로 `.txt` 파일을 받을 수 있습니다.
+
 ## Adaptive Scheduler v2
 
 Web/PWA에는 Adaptive Scheduler v2 MVP가 포함되어 있습니다. 이 스케줄러는 로컬 브라우저 안에서 동작하는 가벼운 FSRS-lite 방식이며, 전체 FSRS 구현은 아닙니다.
